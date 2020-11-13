@@ -1,0 +1,20 @@
+[
+  {
+    "name": "guestbook",
+    "path": "/guestbook",
+    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\guestbook.vue",
+    "chunkName": "pages/guestbook"
+  },
+  {
+    "name": "links",
+    "path": "/links",
+    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\links.vue",
+    "chunkName": "pages/links"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\index.vue",
+    "chunkName": "pages/index"
+  }
+]

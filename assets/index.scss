@@ -1,0 +1,66 @@
+@import './colors.scss';
+@import './pc.scss';
+@import './mobile.scss';
+@import './common.scss';
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: rgba(2, 3, 3, .09);
+}
+
+::-webkit-scrollbar-track {
+  background: hsla(210, 8%, 51%, .09);
+}
+
+#app {
+  &.theme--dark {
+    a {
+      color: #fff;
+    }
+
+    &.v-application,
+    .v-content,
+    .v-toolbar,
+    .v-footer,
+    .v-main {
+      background-color: #171d20;
+    }
+  }
+
+  &.theme--light {
+    a {
+      color: #3c4248;
+    }
+
+    .v-app-bar.v-toolbar.v-sheet {
+      background-color: #ffffff;
+      border-color: #ffffff;
+      color: rgba(0, 0, 0, .87);
+    }
+
+    &.v-application {
+      background-color: #f4f4f4;
+    }
+
+    .v-footer {
+      background-color: #f4f4f4;
+    }
+  }
+
+  .v-main__wrap .container {
+    height: 100%;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+html {
+  font-size: 16px;
+}

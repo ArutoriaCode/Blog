@@ -1,0 +1,60 @@
+@font-face {
+  font-family: "UniNeue";
+  src: url('./fonts/UniNeue-Light.ttf');
+}
+
+@font-face {
+  font-family: "UniNeue-HeavyItalic";
+  src: url('./fonts/UniNeue-HeavyItalic.ttf');
+}
+
+// @font-face {
+//   font-family: "ZCOOL";
+//   src: url('./fonts/ZCOOLXiaoWei-Regular.ttf');
+// }
+
+.pc, .mobile {
+  .toolbar-title {
+    font-family: "UniNeue";
+    font-weight: bold;
+  }
+
+  .v-footer .site-info {
+    display: -webkit-box;
+    display: flex;
+    width: 100%;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    height: 45px;
+    a {
+      font-size: 15px;
+      margin: 6px;
+      cursor: pointer;
+    }
+    .site-item {
+      text-align: center;
+    }
+  }
+
+  .v-toolbar__content, .v-toolbar__extension {
+    padding: 4px 16px;
+  }
+}
+
+.flex-middle {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  &-between {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+  }
+}
+
