@@ -5,6 +5,14 @@
     <v-card class="mx-auto mt-4" outlined>
       <v-list-item three-line>
         <v-list-item-content>
+          <div class="overline mb-1 red--text">关于博客</div>
+          <v-list-item-subtitle class="font-weight-medium">
+            博客样式参考<a href="https://www.yevpt.com">YEVPT</a>，不定时更新。
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            目前仅仅是静态页面，暂无动态数据，后端接口待开发中；<br/>
+            项目仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog">Github</a>
+          </v-list-item-subtitle>
           <div class="overline mb-1 red--text">申请规则</div>
           <v-list-item-subtitle class="mb-3 font-weight-medium"
             >如果要和本站交换友链，请按照以下格式发送到

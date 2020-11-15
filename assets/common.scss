@@ -58,3 +58,12 @@
   }
 }
 
+.flex-bottom-center {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: end;
+  align-items: flex-end;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
