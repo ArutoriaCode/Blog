@@ -17,17 +17,41 @@
       class="rounded"
       height="600"
     >
-      <v-carousel-item class="">
-        <v-img :src="require('~/assets/images/Elaina.jpg')"></v-img>
-        <v-btn>开始阅读</v-btn>
+      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+        <div class="fill-height flex-bottom-center">
+          <v-row class="top-row">
+            <v-col cols="12">
+              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
+            </v-col>
+            <v-col cols="12">
+              <v-btn rounded to="/" color="error">开始阅读</v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </v-carousel-item>
-      <v-carousel-item>
-        <v-img :src="require('~/assets/images/Elaina.jpg')"></v-img>
-        <v-btn>开始阅读</v-btn>
+      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+        <div class="fill-height flex-bottom-center">
+          <v-row class="top-row">
+            <v-col cols="12">
+              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
+            </v-col>
+            <v-col cols="12">
+              <v-btn rounded to="/" color="error">开始阅读</v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </v-carousel-item>
-      <v-carousel-item>
-        <v-img :src="require('~/assets/images/Elaina.jpg')"></v-img>
-        <div></div>
+      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+        <div class="fill-height flex-bottom-center">
+          <v-row class="top-row">
+            <v-col cols="12">
+              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
+            </v-col>
+            <v-col cols="12">
+              <v-btn rounded to="/" color="error">开始阅读</v-btn>
+            </v-col>
+          </v-row>
+        </div>
       </v-carousel-item>
     </v-carousel>
   </v-col>
@@ -36,8 +60,35 @@
 export default {
   data() {
     return {
-      autoPlay: true
+      autoPlay: true,
     }
   },
 }
 </script>
+<style lang="scss">
+.TopCarousel {
+  .v-responsive__sizer {
+    background: -webkit-gradient(
+      linear,
+      left top,
+      left bottom,
+      from(rgba(49, 49, 48, 0)),
+      to(rgba(22, 29, 39, 0.9))
+    );
+    background: linear-gradient(
+      180deg,
+      rgba(49, 49, 48, 0),
+      rgba(22, 29, 39, 0.9)
+    );
+  }
+  .v-responsive__content {
+    position: relative;
+    .top-row {
+      padding: 0 36px 60px 48px;
+    }
+    .top-title {
+      color: #fff;
+    }
+  }
+}
+</style>
