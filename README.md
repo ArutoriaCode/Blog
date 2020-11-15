@@ -1,20 +1,25 @@
-# blog
+### 项目说明
 
-## Build Setup
+第一个[Nuxt](https://nuxtjs.org/)项目
 
-```bash
-# install dependencies
-$ npm install
+项目仿照(抄)[yevpt](https://www.yevpt.com/)的页面做的。
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+使用的技术框架和包如下：
 
-# build for production and launch server
-$ npm run build
-$ npm run start
+1. Vue2
+2. Vuetify
+3. ...
 
-# generate static project
-$ npm run generate
-```
+### 部署方式
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+1. 拉取仓库代码到本地
+2. npm install
+3. 进行打包：`npm run build`
+4. 测试运行: `npm run start`
+5. 使用PM2进程守护：`pm2 start npm --name "blog" -- run start`
+6. 使用nginx转发到nuxt的端口
+
+
+仓库代码更新后，拉取下来需要重新进行打包，否则PM2重启无效（界面不更新）
+
+
