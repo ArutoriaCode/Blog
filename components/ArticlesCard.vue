@@ -7,7 +7,7 @@
     <v-card-subtitle> 这是一段静态的文本 </v-card-subtitle>
 
     <v-card-actions>
-      <v-btn color="error" text> 开始阅读 </v-btn>
+      <v-btn color="error" text to="/post/1024"> 开始阅读 </v-btn>
       <v-spacer></v-spacer>
     </v-card-actions>
   </v-card>

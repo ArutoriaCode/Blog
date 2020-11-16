@@ -1,16 +1,16 @@
 @font-face {
   font-family: "UniNeue";
-  src: url('./fonts/UniNeue-Light.ttf');
+  src: url('../static/fonts/UniNeue-Light.ttf');
 }
 
 @font-face {
   font-family: "UniNeue-HeavyItalic";
-  src: url('./fonts/UniNeue-HeavyItalic.ttf');
+  src: url('../static/fonts/UniNeue-HeavyItalic.ttf');
 }
 
 // @font-face {
 //   font-family: "ZCOOL";
-//   src: url('./fonts/ZCOOLXiaoWei-Regular.ttf');
+//   src: url('../static/fonts/ZCOOLXiaoWei-Regular.ttf');
 // }
 
 .pc, .mobile {
@@ -65,5 +65,9 @@
   align-items: flex-end;
   -webkit-box-pack: center;
   justify-content: center;
+}
+
+.font-unineue {
+  font-family: "UniNeue" !important;
 }
 

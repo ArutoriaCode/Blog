@@ -39,7 +39,7 @@
     </v-card>
     <v-alert prominent class="mt-4 empty-alert" v-else>
       <div slot="prepend">
-        <v-img :src="require('~/assets/images/empty.png')" width="248"></v-img>
+        <v-img :src="require('~/static/images/empty.png')" width="248"></v-img>
       </div>
       <v-subheader>还没有人在这里留言，不妨留个言？</v-subheader>
       <v-btn text outlined>
@@ -71,7 +71,7 @@ export default {
               avatarUrl:
                 'https://oss-cdn.yevpt.com/avatar/user/1556e77a1cc8be20aca60deb063c731f.jpeg?a=5ea43876213bad18bf8ed7de98b841d1&b=5f811f51',
               likeNum: 0,
-              content: '主要用了Nuxt,Springboot,vuetify',
+              content: '静态文本',
               dateCreate: '2020-09-24 09:24',
               dateModifed: '2020-09-24 09:24',
               isUse: '01',
@@ -88,7 +88,7 @@ export default {
               avatarUrl: '',
               likeNum: 0,
               content:
-                '我也自己做了一个博客，受这个博客的启发，风格上相对接近，需要我注明来源吗',
+                '静态文本',
               dateCreate: '2020-09-24 13:21',
               dateModifed: '2020-09-24 13:21',
               isUse: '01',
@@ -105,7 +105,7 @@ export default {
               avatarUrl:
                 'https://oss-cdn.yevpt.com/avatar/user/1556e77a1cc8be20aca60deb063c731f.jpeg?a=5ea43876213bad18bf8ed7de98b841d1&b=5f811f51',
               likeNum: 0,
-              content: '这个当然是你的自由了',
+              content: '静态文本',
               dateCreate: '2020-09-24 21:11',
               dateModifed: '2020-09-24 21:11',
               isUse: '01',

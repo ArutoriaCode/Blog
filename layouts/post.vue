@@ -1,27 +1,25 @@
 <template>
   <v-app :class="_AppClass">
     <LeftNavigation v-model="showLeftNavigation"></LeftNavigation>
-    <v-app-bar app fixed flat>
-      <v-toolbar-title class="toolbar-title" v-text="title" />
+    <v-app-bar app fixed flat height="56px">
+      <v-btn text small @click="$router.back()">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
       <v-spacer />
-      <Tabs :class="_mobileHideClass" style="width: 278px;"></Tabs>
       <v-spacer />
       <div class="toolbar-right-content">
         <v-btn
           :class="_mobileHideClass"
           depressed
           text
+          small
           @click.stop="$vuetify.theme.dark = !$vuetify.theme.dark"
         >
           <v-icon>
             {{ $vuetify.theme.dark ? 'mdi-brightness-4' : 'mdi-brightness-6' }}
           </v-icon>
         </v-btn>
-        <v-btn
-          :class="_mobileHideClass"
-          depressed
-          color="saber"
-        >
+        <v-btn :class="_mobileHideClass" depressed color="saber" small>
           登录
         </v-btn>
         <v-btn
@@ -36,9 +34,7 @@
       </div>
     </v-app-bar>
     <v-main>
-      <v-container>
-        <nuxt class="index-container" />
-      </v-container>
+      <nuxt />
     </v-main>
     <v-footer absolute app>
       <div class="site-info">
@@ -50,22 +46,20 @@
     </v-footer>
   </v-app>
 </template>
-
 <script>
-import LeftNavigation from '../components/LeftNavigation'
-import Tabs from '../components/Tabs'
+import LeftNavigationVue from '@/components/LeftNavigation.vue'
 export default {
-  components: {
-    LeftNavigation,
-    Tabs,
+  head: {
+    titleTemplate: '%s - Arutoria'
   },
 
-  data() {
-    return {
-      title: 'Arutoria',
-      showLeftNavigation: false,
-    }
+  components: {
+    LeftNavigationVue
   },
+
+  data: () => ({
+    showLeftNavigation: false
+  }),
 
   computed: {
     _AppClass() {

@@ -26,7 +26,7 @@
       </div>
       <div class="nav-bar-header-avatar">
         <v-avatar size="128">
-          <img src="../assets/images/Elaina.jpg" alt="" />
+          <v-img :src="require('~/static/images/Elaina.jpg')" alt="" />
         </v-avatar>
         <v-list-item-title class="title"> Elaina </v-list-item-title>
       </div>

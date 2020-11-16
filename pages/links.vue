@@ -56,7 +56,7 @@
             <div class="flex-middle" style="height: 100%">
               <div style="height: 100%">
                 <v-img
-                  :src="require('~/assets/images/Elaina.jpg')"
+                  :src="require('~/static/images/Elaina.jpg')"
                   width="60"
                   height="60"
                   class="ma-3 rounded-lg"
@@ -76,7 +76,7 @@
             <div class="flex-middle" style="height: 100%">
               <div style="height: 100%">
                 <v-img
-                  :src="require('~/assets/images/Elaina.jpg')"
+                  :src="require('~/static/images/Elaina.jpg')"
                   width="60"
                   height="60"
                   class="ma-3 rounded-lg"
@@ -96,7 +96,7 @@
             <div class="flex-middle" style="height: 100%">
               <div style="height: 100%">
                 <v-img
-                  :src="require('~/assets/images/Elaina.jpg')"
+                  :src="require('~/static/images/Elaina.jpg')"
                   width="60"
                   height="60"
                   class="ma-3 rounded-lg"

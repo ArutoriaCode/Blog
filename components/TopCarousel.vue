@@ -18,7 +18,7 @@
       class="rounded"
       height="600"
     >
-      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+      <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
@@ -30,7 +30,7 @@
           </v-row>
         </div>
       </v-carousel-item>
-      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+      <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
@@ -42,7 +42,7 @@
           </v-row>
         </div>
       </v-carousel-item>
-      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+      <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">

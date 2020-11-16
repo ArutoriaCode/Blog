@@ -36,6 +36,16 @@
         color: #ddd !important;
       }
     }
+
+    .saber {
+      color: #fff;
+    }
+
+    .post-container {
+      .article-container {
+        background-color: #2f3133;
+      }
+    }
   }
 
   &.theme--light {
@@ -66,6 +76,10 @@
 
   .v-main__wrap .container {
     height: 100%;
+  }
+
+  .saber {
+    color: #fff;
   }
 }
 
