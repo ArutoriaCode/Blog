@@ -1,0 +1,16 @@
+{
+  "id": "2206821",
+  "name": "blog",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "13895951",
+      "name": "droplet",
+      "font_class": "droplet",
+      "unicode": "e76d",
+      "unicode_decimal": 59245
+    }
+  ]
+}

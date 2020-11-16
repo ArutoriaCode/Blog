@@ -14,7 +14,7 @@
       :show-arrows="false"
       :cycle="autoPlay"
       hide-delimiter-background
-      delimiter-icon="mdi-minus"
+      delimiter-icon="iconfont icon-droplet"
       class="rounded"
       height="600"
     >
@@ -25,7 +25,7 @@
               <a class="text-decoration-none display-1 top-title">魔女之旅（第一章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
+              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -37,7 +37,7 @@
               <a class="text-decoration-none display-1 top-title">魔女之旅（第二章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
+              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -49,7 +49,7 @@
               <a class="text-decoration-none display-1 top-title">魔女之旅（第三章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
+              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -67,6 +67,12 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '../static/fonts/iconfont.css';
+.iconfont {
+  font-size: 20px !important;
+  font-size: 1.25rem !important;
+}
+
 .TopCarousel {
   .v-responsive__sizer {
     background: -webkit-gradient(

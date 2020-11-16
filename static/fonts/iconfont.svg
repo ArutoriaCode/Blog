@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="droplet" unicode="&#59245;" d="M507.768595 3.173554a313.123967 313.123967 0 0 0-223.418182 96.476033 327.087603 327.087603 0 0 0 4.231405 455.722314l196.33719 196.76033a39.775207 39.775207 0 0 0 30.042975 12.694215 42.31405 42.31405 0 0 0 30.042976-13.117355l192.952066-199.722314a327.087603 327.087603 0 0 0-3.808265-455.722314A310.161983 310.161983 0 0 0 507.768595 3.173554z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>
