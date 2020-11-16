@@ -30,6 +30,12 @@
     .v-main {
       background-color: #171d20;
     }
+
+    .pageGuestbook {
+      .guestbook-item {
+        color: #ddd !important;
+      }
+    }
   }
 
   &.theme--light {
@@ -49,6 +55,12 @@
 
     .v-footer {
       background-color: #f4f4f4;
+    }
+
+    .pageGuestbook {
+      .guestbook-item {
+        color: #4c4e4d !important;
+      }
     }
   }
 

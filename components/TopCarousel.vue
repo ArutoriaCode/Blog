@@ -21,22 +21,10 @@
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
+              <a class="text-decoration-none display-1 top-title">魔女之旅（第一章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/" color="error">开始阅读</v-btn>
-            </v-col>
-          </v-row>
-        </div>
-      </v-carousel-item>
-      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
-        <div class="fill-height flex-bottom-center">
-          <v-row class="top-row">
-            <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
-            </v-col>
-            <v-col cols="12">
-              <v-btn rounded to="/" color="error">开始阅读</v-btn>
+              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -45,10 +33,22 @@
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">你们轻轻唱，听完我就走。</a>
+              <a class="text-decoration-none display-1 top-title">魔女之旅（第二章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/" color="error">开始阅读</v-btn>
+              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </v-carousel-item>
+      <v-carousel-item :src="require('~/assets/images/Elaina.jpg')">
+        <div class="fill-height flex-bottom-center">
+          <v-row class="top-row">
+            <v-col cols="12">
+              <a class="text-decoration-none display-1 top-title">魔女之旅（第三章）</a>
+            </v-col>
+            <v-col cols="12">
+              <v-btn rounded to="/" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -87,7 +87,10 @@ export default {
       padding: 0 36px 60px 48px;
     }
     .top-title {
-      color: #fff;
+      color: #fff !important;
+    }
+    .read-btn {
+      color: #fff !important;
     }
   }
 }

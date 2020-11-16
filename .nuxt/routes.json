@@ -2,19 +2,22 @@
   {
     "name": "guestbook",
     "path": "/guestbook",
-    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\guestbook.vue",
-    "chunkName": "pages/guestbook"
+    "component": "/home/www/blog/pages/guestbook.vue",
+    "chunkName": "pages/guestbook",
+    "_name": "_8034b2a0"
   },
   {
     "name": "links",
     "path": "/links",
-    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\links.vue",
-    "chunkName": "pages/links"
+    "component": "/home/www/blog/pages/links.vue",
+    "chunkName": "pages/links",
+    "_name": "_601efdb0"
   },
   {
     "name": "index",
     "path": "/",
-    "component": "E:\\\\workspace\\\\blog\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "component": "/home/www/blog/pages/index.vue",
+    "chunkName": "pages/index",
+    "_name": "_00d7b47e"
   }
 ]
