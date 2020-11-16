@@ -40,24 +40,19 @@
         <nuxt class="index-container" />
       </v-container>
     </v-main>
-    <v-footer absolute app>
-      <div class="site-info">
-        <a class="site-item" href="http://arutoria.com"
-          >&copy; {{ new Date().getFullYear() }} arutoria.com All Rights
-          Reserved.</a
-        >
-      </div>
-    </v-footer>
+    <Footer></Footer>
   </v-app>
 </template>
 
 <script>
 import LeftNavigation from '../components/LeftNavigation'
+import Footer from '../components/Footer'
 import Tabs from '../components/Tabs'
 export default {
   components: {
     LeftNavigation,
     Tabs,
+    Footer
   },
 
   data() {

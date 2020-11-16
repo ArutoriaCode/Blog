@@ -3,11 +3,32 @@
     <LeftNavigation v-model="showLeftNavigation"></LeftNavigation>
     <v-app-bar app fixed flat height="56px">
       <v-btn text small @click="$router.back()">
-        <v-icon>mdi-arrow-left</v-icon>
+        <v-icon>mdi-chevron-left</v-icon>
       </v-btn>
       <v-spacer />
       <v-spacer />
       <div class="toolbar-right-content">
+        <v-btn
+          class="px-2"
+          depressed
+          text
+          small
+        >
+          <v-icon> mdi-heart </v-icon>
+          <span class="pl-1 body-2">0</span>
+        </v-btn>
+        <v-btn
+          class="px-2"
+          depressed
+          text
+          small
+          @click.stop="onScrollToComment"
+        >
+          <v-icon>
+            mdi-message-processing
+          </v-icon>
+          <span class="pl-1 body-2">0</span>
+        </v-btn>
         <v-btn
           :class="_mobileHideClass"
           depressed
@@ -19,7 +40,7 @@
             {{ $vuetify.theme.dark ? 'mdi-brightness-4' : 'mdi-brightness-6' }}
           </v-icon>
         </v-btn>
-        <v-btn :class="_mobileHideClass" depressed color="saber" small>
+        <v-btn :class="_mobileHideClass" class="ml-2" depressed color="saber" small>
           登录
         </v-btn>
         <v-btn
@@ -33,33 +54,37 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-main>
+    <v-main class="pa-0">
       <nuxt />
     </v-main>
-    <v-footer absolute app>
-      <div class="site-info">
-        <a class="site-item" href="http://arutoria.com"
-          >&copy; {{ new Date().getFullYear() }} arutoria.com All Rights
-          Reserved.</a
-        >
-      </div>
-    </v-footer>
+    <Footer></Footer>
   </v-app>
 </template>
 <script>
 import LeftNavigationVue from '@/components/LeftNavigation.vue'
+import Footer from '@/components/Footer.vue'
 export default {
   head: {
     titleTemplate: '%s - Arutoria'
   },
 
   components: {
-    LeftNavigationVue
+    LeftNavigationVue,
+    Footer
   },
 
   data: () => ({
     showLeftNavigation: false
   }),
+
+  methods: {
+    onScrollToComment() {
+      document.getElementById('comments').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
+    }
+  },
 
   computed: {
     _AppClass() {
@@ -70,8 +95,18 @@ export default {
     },
 
     _mobileHideClass() {
-      return 'd-none d-xl-flex d-lg-flex ma-2'
+      return 'd-none d-xl-flex d-lg-flex px-2'
     }
   },
 }
 </script>
+<style lang="scss">
+.toolbar-right-content {
+  i.theme--light {
+    color: #757575 !important;
+  }
+  i.theme--dark {
+    color: #ffffff !important;
+  }
+}
+</style>
