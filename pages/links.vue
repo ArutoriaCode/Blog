@@ -10,8 +10,10 @@
             博客样式参考<a href="https://www.yevpt.com">YEVPT</a>，不定时更新。
           </v-list-item-subtitle>
           <v-list-item-subtitle>
-            目前仅仅是静态页面，暂无动态数据，后端接口待开发中；<br/>
-            项目仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog">Github</a>
+            目前仅仅是静态页面，暂无动态数据，后端接口待开发中
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            项目仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog" class="blue--text text--lighten-2">Github</a>
           </v-list-item-subtitle>
           <div class="overline mb-1 red--text">申请规则</div>
           <v-list-item-subtitle class="mb-3 font-weight-medium"
