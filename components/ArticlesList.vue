@@ -6,6 +6,7 @@
         inset
         disabled
         label="列表形式"
+        :dark="$vuetify.theme.dark"
         :color="`grey ${$vuetify.theme.dark ? 'lighten-4' : 'darken-4'}`"
       />
     </div>
