@@ -8,7 +8,7 @@
     </div>
     <v-card flat v-if="comments.length > 0">
       <div class="guestbook-item" v-for="comment in comments" :key="comment.id">
-        <div style="padding: 10px 0 10px 10px">
+        <div style="padding: 10px 0 10px 10px" v-ripple>
           <div class="container-three">
             <div class="center float-left">
               <div class="subtitle-2 flex-middle">
@@ -28,12 +28,13 @@
               <p>{{ comment.content }}</p>
             </div>
           </div>
-          <div>
-            <div class="expand-reply">
-              <v-btn x-small text>展开n条回复</v-btn>
-            </div>
+        </div>
+        <div>
+          <div class="expand-reply">
+            <v-btn x-small text>展开n条回复</v-btn>
           </div>
         </div>
+        <v-divider></v-divider>
       </div>
     </v-card>
     <v-alert prominent class="mt-4 empty-alert" v-else>
@@ -120,6 +121,7 @@ export default {
 <style lang="scss">
 .pageGuestbook {
   padding: 12px;
+  margin: 0 auto;
   .subinfo {
     padding-left: 0;
     height: 32px;
