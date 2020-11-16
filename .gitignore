@@ -89,6 +89,4 @@ sw.*
 
 # Vim swap files
 *.swp
-.nuxt/App.js
-.nuxt/router.js
-.nuxt/routes.json
+.nuxt
