@@ -121,10 +121,10 @@ export default {
     }
 
     .nav-container {
-      background-color: #1a1d53;
+      background-color: #1a1d53 !important;
 
       .nav-content {
-        background: #242663;
+        background-color: #242663 !important;
         border-radius: 30px 30px 0 0;
         padding: 30px 0;
       }
@@ -133,9 +133,12 @@ export default {
   .nav-container {
     background-color: $saber;
     .nav-content {
-      background-color: #2955ba;
+      background-color: #2955ba !important;
       border-radius: 30px 30px 0 0;
       padding: 30px 0;
+      .v-list.v-sheet {
+        background-color: #2955ba !important;
+      }
       .v-list {
         margin: 0px auto;
         width: 200px;

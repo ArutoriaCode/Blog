@@ -28,7 +28,19 @@
     .v-toolbar,
     .v-footer,
     .v-main {
-      background-color: #171d20;
+      background-color: #171d20 !important;
+    }
+
+    .v-card {
+      background-color: #2f3133;
+    }
+
+    .v-sheet {
+      background-color: #2f3133;
+    }
+
+    .v-subheader {
+      color: #fff !important;
     }
 
     .pageGuestbook {
@@ -42,7 +54,7 @@
     }
 
     .post-container {
-      .article-container {
+      .article-container, .comment-card {
         background-color: #2f3133;
       }
     }

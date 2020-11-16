@@ -1,7 +1,7 @@
 <template>
   <div class="pageGuestbook">
     <div class="title" style="margin-bottom: 6px">留言</div>
-    <v-textarea solo name="input-7-4" label="留下你的足迹..."></v-textarea>
+    <v-textarea solo name="input-7-4" flat label="留下你的足迹..."></v-textarea>
     <div class="flex-middle-between mb-2">
       <v-subheader class="subinfo">欢迎留言</v-subheader>
       <v-btn color="primary" small>请先登录</v-btn>
@@ -13,7 +13,7 @@
             <div class="center float-left">
               <div class="subtitle-2 flex-middle">
                 <span>{{ comment.fromName }}</span>
-                <v-btn color="primary" x-small text class="reply-btn">回复</v-btn>
+                <v-btn color="primary" x-small elevation="0" class="reply-btn">回复</v-btn>
               </div>
               <div class="caption">{{ comment.dateModifed }}</div>
             </div>
