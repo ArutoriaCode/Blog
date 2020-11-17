@@ -1,18 +1,23 @@
 <template>
-  <v-app>
+  <v-app class="errorPage">
     <div
       class="d-flex flex-column justify-center align-center"
       v-if="error.statusCode === 404"
     >
-      <v-img :src="require('~/static/images/404.png')" width="320"></v-img>
-      <v-subheader class="NotFound font-unineue">{{
+      <v-avatar size="320">
+        <v-img :src="require('~/static/images/404.png')"></v-img>
+      </v-avatar>
+      <v-subheader class="alert-text font-unineue">{{
         pageNotFound
       }}</v-subheader>
     </div>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
-    <div class="d-flex flex-row justify-center align-center">
+    <div class="d-flex flex-column justify-center align-center" v-else>
+      <v-img :src="require('~/static/images/404.png')" width="320"></v-img>
+      <v-subheader class="alert-text font-unineue">{{
+        otherError
+      }}</v-subheader>
+    </div>
+    <div class="mt-10 text-center">
       <v-btn to="/" text color="saber"> 返回首页 </v-btn>
     </div>
   </v-app>
@@ -43,12 +48,17 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-.NotFound {
-  font-size: 30px;
-  font-size: 2rem;
+<style lang="scss">
+.errorPage {
+  .v-application--wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-height: 600px;
+  }
+  .alert-text {
+    font-size: 30px;
+    font-size: 2rem;
+  }
 }
 </style>
