@@ -3,12 +3,12 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - blog',
-    title: 'blog',
+    titleTemplate: '%s - Arutoria',
+    title: 'Arutoria',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' },
+      { hid: 'description', name: 'description', content: '也许这就是人生吧？' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -22,6 +22,11 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
+    {
+      src: '~/plugins/loading.js',
+      mode: 'client',
+      ssr: false
+    }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

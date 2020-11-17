@@ -18,12 +18,22 @@ import ArticleList from '@/components/ArticlesList'
 import ArticleCard from '@/components/ArticlesCard'
 import Tags from '@/components/Tags'
 export default {
+  asyncData(ctx) {
+    return new Promise((reject) => {
+      setTimeout(() => {
+        return reject({
+          articles: [1,2,3,4,5],
+        })
+      }, 300)
+    })
+  },
+
   components: {
     TopCarousel,
     ArticleList,
     ArticleCard,
-    Tags
-  }
+    Tags,
+  },
 }
 </script>
 <style lang="scss">
