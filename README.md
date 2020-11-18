@@ -11,10 +11,13 @@
 3. dayjs
 4. ...
 
-后端语言框架考虑中
+后端语言框架
 
-1. java
-2. egg
+1. java（待开发）
+
+
+2. egg.js（开发中）
+   egg仓库地址：https://github.com/Chenwangdexiwang/Blog-egg
 
 ### 部署方式
 
