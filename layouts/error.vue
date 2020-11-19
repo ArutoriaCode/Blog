@@ -4,9 +4,7 @@
       class="d-flex flex-column justify-center align-center"
       v-if="error.statusCode === 404"
     >
-      <v-avatar size="320">
-        <v-img :src="require('~/static/images/404.png')"></v-img>
-      </v-avatar>
+      <v-img :src="require('~/static/images/404.png')" width="320"></v-img>
       <v-subheader class="alert-text font-unineue">{{
         pageNotFound
       }}</v-subheader>
