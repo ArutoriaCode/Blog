@@ -4,7 +4,7 @@
     <v-app-bar app fixed flat>
       <v-toolbar-title class="toolbar-title" v-text="title" />
       <v-spacer />
-      <Tabs :class="_mobileHideClass" style="width: 278px;"></Tabs>
+      <Tabs :class="_mobileHideClass" style="width: 278px"></Tabs>
       <v-spacer />
       <div class="toolbar-right-content">
         <v-btn
@@ -17,13 +17,7 @@
             {{ $vuetify.theme.dark ? 'mdi-brightness-4' : 'mdi-brightness-6' }}
           </v-icon>
         </v-btn>
-        <v-btn
-          :class="_mobileHideClass"
-          depressed
-          color="saber"
-        >
-          登录
-        </v-btn>
+        <v-btn :class="_mobileHideClass" depressed color="saber"> 登录 </v-btn>
         <v-btn
           depressed
           text
@@ -36,7 +30,17 @@
       </div>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <div
+        :class="{ 'd-flex': $nuxt.isOffline }"
+        class="flex-column justify-center align-center"
+        style="height: 100%;"
+        v-show="$nuxt.isOffline"
+      >
+        <v-subheader class="error-alert-text font-unineue"
+          >You Are Offline</v-subheader
+        >
+      </div>
+      <v-container v-show="!$nuxt.isOffline">
         <nuxt class="index-container" />
       </v-container>
     </v-main>
@@ -48,17 +52,19 @@
 import LeftNavigation from '../components/LeftNavigation'
 import Footer from '../components/Footer'
 import Tabs from '../components/Tabs'
+import offline from '../static/images/offline.png'
 export default {
   components: {
     LeftNavigation,
     Tabs,
-    Footer
+    Footer,
   },
 
   data() {
     return {
       title: 'Arutoria',
       showLeftNavigation: false,
+      offline
     }
   },
 
@@ -72,7 +78,13 @@ export default {
 
     _mobileHideClass() {
       return 'd-none d-xl-flex d-lg-flex ma-2'
-    }
+    },
   },
 }
 </script>
+<style lang="scss">
+.error-alert-text {
+  font-size: 30px;
+  font-size: 2rem;
+}
+</style>
