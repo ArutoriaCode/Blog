@@ -54,19 +54,12 @@
 </template>
 <script>
 import dayjs from 'dayjs'
+import isSafeInteger from 'lodash/isSafeInteger'
 export default {
   layout: 'post',
 
-  asyncData() {
-    return new Promise((reject) => {
-      setTimeout(() => {
-        return reject({
-          title: '不吉波普不笑',
-          name: 'Arutoria',
-          nowTime: dayjs().format('M月 DD,YYYY'),
-        })
-      }, 320)
-    })
+  asyncData({ $api }) {
+    $api.get()
   },
 
   head() {
@@ -77,7 +70,7 @@ export default {
 
   validate({ params }) {
     // 必须是number类型
-    return params.id === '1024'
+    return isSafeInteger(Number(params.id))
   },
 }
 </script>

@@ -1,32 +1,43 @@
 import colors from 'vuetify/es5/util/colors'
 
+const dev = process.env.NODE_ENV !== 'production'
+
 export default {
+  dev,
+  devtools: dev,
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     titleTemplate: '%s - Arutoria',
     title: 'Arutoria',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' },
-      { hid: 'description', name: 'description', content: '也许这就是人生吧？' }
+      {
+        name: 'viewport',
+        content:
+          'width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no',
+      },
+      {
+        hid: 'description',
+        name: 'description',
+        content: '也许这就是人生吧？',
+      },
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [
-    '@/assets/index.scss'
-  ],
+  css: ['@/assets/index.scss'],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
     {
       src: '~/plugins/loading.js',
       mode: 'client',
-      ssr: false
-    }
+      ssr: false,
+    },
+    {
+      src: '~/plugins/api.js',
+    },
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -45,7 +56,15 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {},
+  axios: {
+    proxy: true
+  },
+
+  proxy: {
+    '/api/v1/': dev
+      ? 'http://localhost:7001/api/v1/'
+      : 'http://arutoria.com/api/v1/',
+  },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
@@ -63,22 +82,21 @@ export default {
           // saber 阿尔托莉雅
           saber: '#22469a',
           // 灰之魔女 伊蕾娜
-          elaina: '#f1e8eb'
+          elaina: '#f1e8eb',
         },
         light: {
           // saber 阿尔托莉雅
           saber: '#22469a',
           // 灰之魔女 伊蕾娜
-          elaina: '#f1e8eb'
-        }
-      }
+          elaina: '#f1e8eb',
+        },
+      },
     },
     breakpoint: {
-      mobileBreakpoint: 1264
-    }
+      mobileBreakpoint: 1264,
+    },
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
-  build: {
-  }
+  build: {},
 }
