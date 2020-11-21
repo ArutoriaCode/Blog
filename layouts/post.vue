@@ -15,7 +15,7 @@
           small
         >
           <v-icon> mdi-heart </v-icon>
-          <span class="pl-1 body-2">0</span>
+          <span class="pl-1 body-2">{{ heart }}</span>
         </v-btn>
         <v-btn
           class="px-2"
@@ -27,7 +27,7 @@
           <v-icon>
             mdi-message-processing
           </v-icon>
-          <span class="pl-1 body-2">0</span>
+          <span class="pl-1 body-2">{{ comment }}</span>
         </v-btn>
         <v-btn
           :class="_mobileHideClass"
@@ -54,7 +54,7 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-main class="pa-0">
+    <v-main>
       <nuxt />
     </v-main>
     <Footer></Footer>
@@ -74,8 +74,17 @@ export default {
   },
 
   data: () => ({
-    showLeftNavigation: false
+    showLeftNavigation: false,
+    heart: 0,
+    comment: 0
   }),
+
+  provide() {
+    return {
+      setHeart: this.setHeart,
+      setComment: this.setHeart
+    }
+  },
 
   methods: {
     onScrollToComment() {
@@ -83,6 +92,14 @@ export default {
         behavior: 'smooth',
         block: 'center'
       })
+    },
+
+    setHeart(value) {
+      this.heart = value
+    },
+
+    setComment(value) {
+      this.comment = value
     }
   },
 

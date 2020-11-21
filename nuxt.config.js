@@ -61,9 +61,9 @@ export default {
   },
 
   proxy: {
-    '/api/v1/': dev
-      ? 'http://localhost:7001/api/v1/'
-      : 'http://arutoria.com/api/v1/',
+    '/api/': dev
+      ? 'http://localhost:7001'
+      : 'http://arutoria.com',
   },
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

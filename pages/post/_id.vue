@@ -2,14 +2,14 @@
   <div class="post-container">
     <div class="post-bg-img-box">
       <v-img
-        contain
-        :src="require('~/static/images/bujibopu.jpg')"
-        width="720px"
+        :src="img"
+        width="100%"
+        max-height="405px"
       ></v-img>
     </div>
     <div class="article-container">
       <div class="article-content">
-        <div class="display-1">{{ title }}</div>
+        <div class="display-1">{{ post.title }}</div>
         <div class="flex-middle-between mt-8 mb-15">
           <div>
             <div class="d-flex justify-start align-center">
@@ -18,16 +18,16 @@
               </v-avatar>
               <div class="ml-4">
                 <div class="font-weight-regular font-unineue font-weight-bold">
-                  {{ name }}
+                  {{ post.User.username }}
                 </div>
-                <div class="caption mt-1">{{ nowTime }}</div>
+                <div class="caption mt-1">{{ post.updated_at }}</div>
               </div>
             </div>
           </div>
           <div></div>
         </div>
         <div class="">
-          少女宫下藤花，当她察觉到“世界之敌”的时候便会诞生出另一个名为“不吉波普”的人格。围绕着各种奇怪的事件，少年与少女们的故事慢慢展开了.
+          {{ post.content }}
         </div>
       </div>
     </div>
@@ -58,13 +58,49 @@ import isSafeInteger from 'lodash/isSafeInteger'
 export default {
   layout: 'post',
 
-  asyncData({ $api }) {
-    $api.get()
+  data() {
+    return {
+      post: {}
+    }
+  },
+
+  inject: {
+    setHeart: {
+      type: Function
+    },
+    setComment: {
+      type: Function
+    }
+  },
+
+  async asyncData({ $api, params }) {
+    const post = await $api.get(`posts/${params.id}`)
+    if (post.data && post.data.updated_at) {
+      post.data.updated_at = dayjs(post.data.updated_at).format("M月 DD，YYYY")
+    }
+
+    return {
+      post: post.data
+    }
+  },
+
+  computed: {
+    img() {
+      if (this.post.data && this.post.data.img) {
+        return this.post.data.img
+      }
+
+      return require('~/static/images/empty.png')
+    }
+  },
+
+  created() {
+    this.setHeart(this.post.heart)
   },
 
   head() {
     return {
-      title: this.title,
+      title: this.post.title || '',
     }
   },
 
@@ -76,9 +112,13 @@ export default {
 </script>
 <style lang="scss">
 .post-container {
+  width: 100%;
   position: relative;
   margin: 36px auto;
   max-width: 720px !important;
+  .post-bg-img-box {
+    background-color: #ffffff;
+  }
 
   .article-container {
     padding: 40px 30px;
@@ -93,10 +133,19 @@ export default {
   }
 }
 
+.theme--dark {
+  .post-bg-img-box {
+    background-color: #2f3133;
+  }
+}
+
 .pc {
   .post-container {
     padding: 24px 0;
     margin-top: 64px !important;
+    .post-bg-img-box {
+      border-radius: 4px 4px 0 0;
+    }
   }
 }
 .mobile {
