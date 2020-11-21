@@ -21,6 +21,7 @@ export default {
 </script>
 <style lang="scss">
 .Tabs {
+  height: 56px;
   display: flex;
   flex-direction: row;
   justify-content: center;

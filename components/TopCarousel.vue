@@ -16,7 +16,7 @@
       hide-delimiter-background
       delimiter-icon="iconfont icon-droplet"
       class="rounded"
-      height="600"
+      :height="carouselHeight"
     >
       <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
         <div class="fill-height flex-bottom-center">
@@ -61,9 +61,16 @@
 export default {
   data() {
     return {
-      autoPlay: true,
+      autoPlay: true
     }
   },
+
+  computed: {
+    carouselHeight() {
+      // 让轮播图能在各种设备下能完整的显示在可视范围内
+      return this.$vuetify.breakpoint.height - 162;
+    }
+  }
 }
 </script>
 <style lang="scss">

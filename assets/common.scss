@@ -14,6 +14,14 @@
 // }
 
 .pc, .mobile {
+
+  .app-bar {
+    height: 56px;
+    .v-toolbar__content {
+      height: 56px !important;
+    }
+  }
+
   .toolbar-title {
     font-family: "UniNeue";
     font-weight: bold;

@@ -3,18 +3,33 @@
     <TopCarousel></TopCarousel>
     <v-col cols="12">
       <v-row>
-        <ArticleList :class="_ArticleListClass">
+        <ArticleList>
           <div
-              :class="_ArticleCardClass"
-              style="height: 100%"
-              v-show="hasError"
+            :class="_ArticleCardClass"
+            v-show="hasError"
+          >
+            <v-img
+              width="280"
+              height="280"
+              contain
+              :src="require('~/static/images/error.png')"
+            ></v-img>
+            <v-subheader class="error-alert-text font-unineue mt-2"
+              >GET POSTS ERROR</v-subheader
             >
-              <v-img width="280" contain :src="require('~/static/images/error.png')"></v-img>
-              <v-subheader class="error-alert-text font-unineue"
-                >好像出错了</v-subheader
+          </div>
+          <div v-show="!hasError">
+            <div v-if ="isEmpty" :class="_emptyClass">
+              <v-img
+                width="280"
+                height="280"
+                contain
+                :src="require('~/static/images/empty.png')"
+              ></v-img>
+              <v-subheader class="error-alert-text font-unineue mt-2"
+                >EMPTY DATA</v-subheader
               >
             </div>
-          <div v-show="!hasError">
             <ArticleCard
               v-for="post in posts"
               :key="post.id"
@@ -43,7 +58,7 @@ export default {
 
   data() {
     return {
-      hasError: false
+      hasError: false,
     }
   },
 
@@ -51,9 +66,11 @@ export default {
     try {
       const posts = await $api.get('/posts')
       return {
-        posts: posts.data,
+        posts: [],
+        test: false
       }
     } catch (error) {
+      console.error("Get Post Error:", error)
       return {
         posts: [],
         hasError: true,
@@ -64,19 +81,25 @@ export default {
   computed: {
     _TagsClass() {
       return {
-        'mt-10': this.hasError && this.$vuetify.breakpoint.mobile
+        'mt-10': this.hasError && this.$vuetify.breakpoint.mobile,
       }
     },
-    _ArticleListClass () {
-      return { 'mb-10': this.hasError }
-    },
-    _ArticleCardClass () {
+
+    _ArticleCardClass() {
       return {
         'd-flex': this.hasError,
-        'flex-column justify-center align-center': true
+        '_post-card flex-column justify-center align-center': true,
       }
+    },
+
+    isEmpty() {
+      return this.posts.length === 0
+    },
+
+    _emptyClass() {
+      return 'd-flex _post-card flex-column justify-center align-center'
     }
-  }
+  },
 }
 </script>
 <style lang="scss">
@@ -94,6 +117,10 @@ export default {
       font-size: 1.25rem;
       padding-left: 0;
     }
+  }
+
+  ._post-card {
+    max-height: 500px;
   }
 }
 </style>
