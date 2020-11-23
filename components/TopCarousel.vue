@@ -74,7 +74,7 @@ export default {
     _CarouselItemClass() {
       return {
         "text-decoration-none top-title": true,
-        "title": this.$vuetify.breakpoint.xs,
+        "headline": this.$vuetify.breakpoint.xs,
         "display-1": !this.$vuetify.breakpoint.xs
       }
     }

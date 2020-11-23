@@ -82,7 +82,7 @@ export default {
     value() {
       this.drawer = this.value
     },
-  },
+  }
 }
 </script>
 <style lang="scss">

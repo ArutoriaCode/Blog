@@ -1,7 +1,13 @@
 <template>
-  <div class="post-main-item-box">
+  <div class="post-main-item-box" elevation="1">
     <v-card class="post-main-item" flat>
-      <v-img :src="post.img"></v-img>
+      <v-img
+        v-show="post.img"
+        :aspect-ratio="16 / 9"
+        :src="post.img"
+        max-width="100%"
+        max-height="400px"
+      />
 
       <v-card-title> {{ post.title }} </v-card-title>
 
@@ -10,10 +16,10 @@
       <v-card-actions>
         <v-btn color="error" text :to="`/post/${post.id}`"> 开始阅读 </v-btn>
         <v-spacer></v-spacer>
-        <div class="d-flex justify-center align-end">
+        <div class="d-flex justify-center align-end flex-wrap">
           <v-btn text x-small>
             <v-icon size="20"> mdi-eye </v-icon>
-            <span class="pl-1">0</span>
+            <span class="pl-1">{{ post.readCount }}</span>
           </v-btn>
           <v-btn text x-small>
             <v-icon size="20"> mdi-heart </v-icon>
@@ -21,7 +27,7 @@
           </v-btn>
           <v-btn text x-small>
             <v-icon size="20"> mdi-message-processing </v-icon>
-            <span class="pl-1">0</span>
+            <span class="pl-1">{{ post.commentNum }}</span>
           </v-btn>
         </div>
       </v-card-actions>

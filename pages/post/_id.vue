@@ -18,7 +18,7 @@
               </v-avatar>
               <div class="ml-4">
                 <div class="font-weight-regular font-unineue font-weight-bold">
-                  {{ post.User.username }}
+                  {{ post.user.username }}
                 </div>
                 <div class="caption mt-1">{{ post.updated_at }}</div>
               </div>
@@ -55,47 +55,37 @@
 <script>
 import dayjs from 'dayjs'
 import isSafeInteger from 'lodash/isSafeInteger'
+import get from 'lodash/get'
+
 export default {
-  layout: 'post',
-
-  data() {
-    return {
-      post: {}
+  async asyncData({ $api, params, store }) {
+    console.log("🚀 Get Cache")
+    const posts = store.state.posts
+    if (posts[params.id]) {
+      return {
+        post: posts[params.id]
+      }
     }
-  },
 
-  inject: {
-    setHeart: {
-      type: Function
-    },
-    setComment: {
-      type: Function
-    }
-  },
-
-  async asyncData({ $api, params }) {
     const post = await $api.get(`posts/${params.id}`)
     if (post.data && post.data.updated_at) {
       post.data.updated_at = dayjs(post.data.updated_at).format("M月 DD，YYYY")
     }
 
+    store.commit('setPostCache', post.data)
     return {
-      post: post.data
+      post: posts[params.id]
     }
   },
 
   computed: {
     img() {
-      if (this.post.data && this.post.data.img) {
-        return this.post.data.img
+      if (this.post && this.post.img) {
+        return this.post.img
       }
 
       return require('~/static/images/empty.png')
     }
-  },
-
-  created() {
-    this.setHeart(this.post.heart)
   },
 
   head() {

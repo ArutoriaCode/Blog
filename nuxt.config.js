@@ -37,7 +37,7 @@ export default {
     },
     {
       src: '~/plugins/api.js',
-    },
+    }
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
@@ -52,7 +52,7 @@ export default {
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
+    '@nuxtjs/axios'
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)

@@ -4,7 +4,7 @@ export default ({ $axios }, inject) => {
   const api = $axios.create()
 
   api.setBaseURL(
-    dev ? 'http://localhost:7001/api/v1/' : 'http://arutoria.com/api/v1/'
+    dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
   )
 
   api.setHeader('Content-Type', 'application/json', ['post'])
