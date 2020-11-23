@@ -56,15 +56,7 @@ export default {
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
-  axios: {
-    proxy: true
-  },
-
-  proxy: {
-    '/api/': dev
-      ? 'http://localhost:7001'
-      : 'http://arutoria.com',
-  },
+  axios: {},
 
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
