@@ -22,22 +22,10 @@
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">魔女之旅（第一章）</a>
+              <a :class="_CarouselItemClass">魔女之旅（第一章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
-            </v-col>
-          </v-row>
-        </div>
-      </v-carousel-item>
-      <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
-        <div class="fill-height flex-bottom-center">
-          <v-row class="top-row">
-            <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">魔女之旅（第二章）</a>
-            </v-col>
-            <v-col cols="12">
-              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
+              <v-btn rounded to="/post/1024" :small="$vuetify.breakpoint.xs" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -46,10 +34,22 @@
         <div class="fill-height flex-bottom-center">
           <v-row class="top-row">
             <v-col cols="12">
-              <a class="text-decoration-none display-1 top-title">魔女之旅（第三章）</a>
+              <a :class="_CarouselItemClass">魔女之旅（第二章）</a>
             </v-col>
             <v-col cols="12">
-              <v-btn rounded to="/post/1024" color="error" class="read-btn">开始阅读</v-btn>
+              <v-btn rounded to="/post/1024" :small="$vuetify.breakpoint.xs" color="error" class="read-btn">开始阅读</v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </v-carousel-item>
+      <v-carousel-item :src="require('~/static/images/Elaina.jpg')">
+        <div class="fill-height flex-bottom-center">
+          <v-row class="top-row">
+            <v-col cols="12">
+              <a :class="_CarouselItemClass">魔女之旅（第三章）</a>
+            </v-col>
+            <v-col cols="12">
+              <v-btn rounded to="/post/1024" :small="$vuetify.breakpoint.xs" color="error" class="read-btn">开始阅读</v-btn>
             </v-col>
           </v-row>
         </div>
@@ -69,6 +69,14 @@ export default {
     carouselHeight() {
       // 让轮播图能在各种设备下能完整的显示在可视范围内
       return this.$vuetify.breakpoint.height - 162;
+    },
+
+    _CarouselItemClass() {
+      return {
+        "text-decoration-none top-title": true,
+        "title": this.$vuetify.breakpoint.xs,
+        "display-1": !this.$vuetify.breakpoint.xs
+      }
     }
   }
 }

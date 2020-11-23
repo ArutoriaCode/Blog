@@ -66,7 +66,7 @@ export default {
     try {
       const posts = await $api.get('/posts')
       return {
-        posts: [],
+        posts: posts.data,
         test: false
       }
     } catch (error) {
