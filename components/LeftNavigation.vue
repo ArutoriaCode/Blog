@@ -48,7 +48,7 @@
       </div>
     </div>
     <div slot="append" class="container">
-      <v-btn block rounded color="primary">登录</v-btn>
+      <v-btn block rounded color="primary" @click.stop="_showAccount">登录</v-btn>
     </div>
   </v-navigation-drawer>
 </template>
@@ -63,6 +63,12 @@ export default {
     return {
       drawer: this.value,
       routes
+    }
+  },
+
+  inject: {
+    showAccount: {
+      type: Function
     }
   },
 
@@ -82,6 +88,13 @@ export default {
     value() {
       this.drawer = this.value
     },
+  },
+
+  methods: {
+    _showAccount() {
+      this._drawer = false
+      this.showAccount()
+    }
   }
 }
 </script>

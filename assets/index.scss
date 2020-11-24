@@ -31,12 +31,18 @@
       background-color: #171d20 !important;
     }
 
-    .v-card {
+    .v-card, .v-sheet {
       background-color: #2f3133;
     }
 
-    .v-sheet {
-      background-color: #2f3133;
+    .form-field {
+      .v-input__slot, input {
+        background: #3f3f42;
+        color: #fff;
+      }
+      label {
+        color: #fff;
+      }
     }
 
     .v-subheader {
@@ -66,8 +72,8 @@
     }
 
     .v-app-bar.v-toolbar.v-sheet {
-      background-color: #ffffff;
-      border-color: #ffffff;
+      background-color: #f4f4f4;
+      border-color: #f4f4f4;
       color: rgba(0, 0, 0, .87);
     }
 
@@ -101,4 +107,15 @@ a {
 
 html {
   font-size: 16px !important;
+}
+
+.v-dialog {
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background: rgba(2,3,3,.09);
+  }
+  &::-webkit-scrollbar{
+    width: 8px;
+    height: 8px;
+  }
 }

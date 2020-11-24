@@ -1,7 +1,7 @@
 <template>
   <div class="AppBar">
     <LeftNavigation v-model="showLeftNavigation"></LeftNavigation>
-    <v-app-bar app fixed flat>
+    <v-app-bar app fixed flat height="56px">
       <!-- Left Start -->
       <template v-if="isPost">
         <v-btn text small @click="$router.back()">

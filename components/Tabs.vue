@@ -1,11 +1,12 @@
 <template>
-  <v-tabs class="Tabs" :value="$nuxt.$route.name">
+  <v-tabs class="Tabs" :value="$nuxt.$route.name" slider-color="saber">
     <v-tab
       v-for="route in routes"
       :key="route.value"
       :to="route.to"
       :value="route.value"
       nuxt
+      class="font-weight-light"
     >
       {{ route.name }}
     </v-tab>
