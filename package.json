@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
-    "@nuxtjs/proxy": "^2.0.1",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.6",
     "lodash": "^4.17.20",

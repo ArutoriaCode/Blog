@@ -59,17 +59,23 @@
         :loading="loading"
         :color="timer ? 'error' : ''"
       >
-        <span class="subtitle-2" v-if="timer">操作频繁，请等待 {{second}} 秒</span>
+        <span class="subtitle-2" v-if="timer"
+          >操作频繁，请等待 {{ second }} 秒</span
+        >
         <span class="subtitle-2" v-show="timer === null">继续</span>
-        <v-icon size="18px" class="ml-2" v-show="timer === null">mdi-arrow-right</v-icon>
+        <v-icon size="18px" class="ml-2" v-show="timer === null"
+          >mdi-arrow-right</v-icon
+        >
       </v-btn>
     </div>
   </v-form>
 </template>
 <script>
 import { emailRules, passwordRules, usernameRules } from './rules'
-import { EXIST_USER, SUCCESS } from '@/utils/status.js'
+import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/utils/codes.js'
+import intercept from '@/mixins/intercept'
 export default {
+  mixins: [intercept],
   data: () => ({
     hidePassowrd: true,
     emailRules,
@@ -81,39 +87,26 @@ export default {
     password: '',
     username: '',
 
-    count: 0,
-    second: 10,
-    timer: null
+    /** 已在intercept定义 */
+    // count: 0,
+    // second: 10,
+    // timer: null
   }),
 
   methods: {
     onRegister() {
-      if (this.timer) {
-        return
-      }
-
-      if (this.count >= 5) {
-        this.timer = setInterval(() => {
-          this.second--
-          if (this.second === 0) {
-            clearInterval(this.timer)
-            this.count = 0
-            this.second = 10
-            this.timer = null
-          }
-        }, 1000)
-        return
-      }
-
       const allowRegister = this.$refs['registerForm'].validate()
       if (!allowRegister) {
         this.$alert.error('不行不行不行！')
         return
       }
 
-      this.loading = true
-      this.count++
+      const isAllow = this.allowPassage()
+      if (isAllow === false) {
+        return
+      }
 
+      this.loading = true
       this.$api
         .post('/user/register', {
           email: this.email,
@@ -122,8 +115,18 @@ export default {
         })
         .then((rsp) => {
           this.loading = false
-          if (rsp.code === SUCCESS) {
-            this.$alert.success('注册成功！') 
+          if (rsp.code !== REGISTER_SUCCESS) {
+            return Promise.reject()
+          }
+
+          const { access_token, refresh_token } = rsp.data
+          localStorage.setItem('access_token', access_token)
+          localStorage.setItem('_refresh_access_token', refresh_token)
+          this.$emit('onClose')
+        }).catch(err => {
+          this.loading = false
+          if (!err) {
+            this.$alert.error('凉凉，不知道出啥错了。')
           }
         })
     },

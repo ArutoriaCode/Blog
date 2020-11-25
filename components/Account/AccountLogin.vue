@@ -1,9 +1,15 @@
 <template>
-  <v-form class="main-form" lazy-validation>
+  <v-form class="main-form" ref="loginForm" lazy-validation>
     <div class="flex xs12 sm12">
       <div class="form-field input-required">
         <label>邮箱</label>
-        <v-text-field :rules="emailRules" filled rounded dense />
+        <v-text-field
+          v-model="email"
+          :rules="emailRules"
+          filled
+          rounded
+          dense
+        />
       </div>
     </div>
     <div class="flex xs12 sm12">
@@ -14,6 +20,7 @@
           filled
           rounded
           dense
+          v-model="password"
           :rules="passwordRules"
         >
           <template slot="append-outer">
@@ -31,21 +38,78 @@
       </div>
     </div>
     <div class="flex xs12 sm12 text-center">
-      <v-btn large class="next-btn" elevation="0">
-        <span class="subtitle-2">继续</span>
-        <v-icon size="18px" class="ml-2">mdi-arrow-right</v-icon>
+      <v-btn
+        large
+        class="next-btn"
+        elevation="0"
+        :loading="loading"
+        :color="timer ? 'error' : ''"
+        @click="onLogin"
+      >
+        <span class="subtitle-2" v-if="timer"
+          >操作频繁，请等待 {{ second }} 秒</span
+        >
+        <span class="subtitle-2" v-show="timer === null">继续</span>
+        <v-icon size="18px" class="ml-2" v-show="timer === null"
+          >mdi-arrow-right</v-icon
+        >
       </v-btn>
     </div>
   </v-form>
 </template>
 <script>
+import intercept from '~/mixins/intercept'
+import { LOGIN_SUCEESS } from '@/utils/codes.js'
 import { emailRules, passwordRules } from './rules'
 export default {
+  mixins: [intercept],
   data: () => ({
     hidePassowrd: true,
     emailRules,
     passwordRules,
+    email: '',
+    password: '',
+    loading: false,
   }),
+
+  methods: {
+    onLogin() {
+      const allowLogin = this.$refs['loginForm'].validate()
+      if (!allowLogin) {
+        this.$alert.error('不行不行不行！')
+        return
+      }
+
+      const isAllow = this.allowPassage()
+      if (isAllow === false) {
+        return
+      }
+
+      this.loading = true
+      this.$api
+        .post('/user/token', {
+          email: this.email,
+          password: this.password,
+        })
+        .then((rsp) => {
+          this.loading = false
+          if (rsp.code !== LOGIN_SUCEESS) {
+            return Promise.reject()
+          }
+
+          const { access_token, refresh_token } = rsp.data
+          localStorage.setItem('access_token', access_token)
+          localStorage.setItem('_refresh_access_token', refresh_token)
+          this.$emit('onClose')
+        })
+        .catch((err) => {
+          this.loading = false
+          if (!err) {
+            this.$alert.error('凉凉，不知道出啥错了。')
+          }
+        })
+    },
+  },
 }
 </script>
 <style lang="scss">

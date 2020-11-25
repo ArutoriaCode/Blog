@@ -24,8 +24,8 @@
             <h3 v-else>请填写以下信息进行注册</h3>
           </div>
         </header>
-        <AccountLogin v-show="isLogin"></AccountLogin>
-        <AccountRegister v-show="!isLogin"></AccountRegister>
+        <AccountLogin v-show="isLogin" @onClose="closeAccount"></AccountLogin>
+        <AccountRegister v-show="!isLogin" @onClose="closeAccount"></AccountRegister>
       </div>
     </v-card>
   </v-dialog>
@@ -65,12 +65,14 @@ export default {
 
     dialog(v) {
       this.$emit('input', v)
-    },
-
-    changeAccountForm(value) {
-      this.isLogin = value
     }
   },
+
+  methods: {
+    closeAccount() {
+      this.dialog = false
+    }
+  }
 }
 </script>
 <style lang="scss">
