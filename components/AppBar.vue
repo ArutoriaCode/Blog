@@ -43,7 +43,7 @@
           @click.stop="switchTheme"
         >
           <v-icon>
-            {{ $vuetify.theme.dark ? 'mdi-brightness-4' : 'mdi-brightness-6' }}
+            {{ $vuetify.theme.dark ? 'mdi-brightness-5' : 'mdi-brightness-2' }}
           </v-icon>
         </v-btn>
         <v-btn
