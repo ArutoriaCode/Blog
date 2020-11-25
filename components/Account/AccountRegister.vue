@@ -57,16 +57,18 @@
         elevation="0"
         @click="onRegister"
         :loading="loading"
+        :color="timer ? 'error' : ''"
       >
-        <span class="subtitle-2">继续</span>
-        <v-icon size="18px" class="ml-2">mdi-arrow-right</v-icon>
+        <span class="subtitle-2" v-if="timer">操作频繁，请等待 {{second}} 秒</span>
+        <span class="subtitle-2" v-show="timer === null">继续</span>
+        <v-icon size="18px" class="ml-2" v-show="timer === null">mdi-arrow-right</v-icon>
       </v-btn>
     </div>
   </v-form>
 </template>
 <script>
 import { emailRules, passwordRules, usernameRules } from './rules'
-import { SUCCESS } from '@/utils/status.js'
+import { EXIST_USER, SUCCESS } from '@/utils/status.js'
 export default {
   data: () => ({
     hidePassowrd: true,
@@ -78,17 +80,39 @@ export default {
     email: '',
     password: '',
     username: '',
+
+    count: 0,
+    second: 10,
+    timer: null
   }),
 
   methods: {
     onRegister() {
+      if (this.timer) {
+        return
+      }
+
+      if (this.count >= 5) {
+        this.timer = setInterval(() => {
+          this.second--
+          if (this.second === 0) {
+            clearInterval(this.timer)
+            this.count = 0
+            this.second = 10
+            this.timer = null
+          }
+        }, 1000)
+        return
+      }
+
       const allowRegister = this.$refs['registerForm'].validate()
       if (!allowRegister) {
-        this.$store.state.$alert.error('不行不行不行！')
+        this.$alert.error('不行不行不行！')
         return
       }
 
       this.loading = true
+      this.count++
 
       this.$api
         .post('/user/register', {
@@ -97,9 +121,9 @@ export default {
           username: this.username,
         })
         .then((rsp) => {
+          this.loading = false
           if (rsp.code === SUCCESS) {
-            this.$store.state.$alert.success('注册成功！')
-            this.loading = false
+            this.$alert.success('注册成功！') 
           }
         })
     },
@@ -122,7 +146,7 @@ export default {
     line-height: 24px;
     box-sizing: border-box;
     height: 40px;
-    padding: 10px 16px;
+    padding: 10px 16px !important;
     outline: none;
     border-radius: 8px;
     -webkit-transition: background-color 0.2s ease, outline 0.2s ease,

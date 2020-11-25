@@ -1,9 +1,9 @@
-import handlerException from "~/utils/handlerException"
+import clientHandlerException from "~/utils/clientHandlerException"
 
 const dev = process.env.NODE_ENV !== 'production'
 
-export default ({ $axios, $alert }, inject) => {
-  const api = $axios.create()
+export default (ctx, inject) => {
+  const api = ctx.$axios.create()
 
   api.setBaseURL(
     dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
@@ -34,7 +34,9 @@ export default ({ $axios, $alert }, inject) => {
       }
     }
 
-    handlerException(data, $alert)
+    if (process.client) {
+      clientHandlerException(data, ctx.$alert)
+    }
 
     return data
   })

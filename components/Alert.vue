@@ -27,7 +27,7 @@ const defaults = {
   outlined: false,
   prominent: false,
   text: false,
-  timeout: 10000,
+  timeout: 3000,
 }
 const types = ['success', 'info', 'warning', 'error']
 export default {

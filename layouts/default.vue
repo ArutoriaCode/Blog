@@ -47,11 +47,6 @@ export default {
     }
   },
 
-  mounted() {
-    console.log("🚀 ~ file: default.vue ~ line 52 ~ mounted ~ this.$alert", this.$alert.success)
-    this.$alert.success('成功！')
-  },
-
   computed: {
     _AppClass() {
       return {

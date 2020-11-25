@@ -66,6 +66,10 @@ export default {
     dialog(v) {
       this.$emit('input', v)
     },
+
+    changeAccountForm(value) {
+      this.isLogin = value
+    }
   },
 }
 </script>
