@@ -109,6 +109,10 @@ html {
   font-size: 16px !important;
 }
 
+body {
+  position: relative !important;
+}
+
 .v-dialog {
   &::-webkit-scrollbar-thumb {
     border-radius: 8px;

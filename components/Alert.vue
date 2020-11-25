@@ -120,7 +120,7 @@ export default {
 </script>
 <style lang="scss">
 .Top-Alert {
-  position: fixed;
+  position: fixed !important;
   bottom: 24px;
   right: 24px;
   z-index: 1999;
