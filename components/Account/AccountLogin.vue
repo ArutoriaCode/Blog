@@ -10,7 +10,7 @@
       <div class="form-field input-required">
         <label>密码</label>
         <v-text-field
-          :type="hidePassowrd ? 'text' : 'password'"
+          :type="!hidePassowrd ? 'text' : 'password'"
           filled
           rounded
           dense

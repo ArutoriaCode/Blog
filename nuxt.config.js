@@ -36,6 +36,11 @@ export default {
       ssr: false,
     },
     {
+      src: '~/plugins/alert.js',
+      mode: 'client',
+      ssr: false,
+    },
+    {
       src: '~/plugins/api.js',
     }
   ],

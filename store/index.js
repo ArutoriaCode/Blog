@@ -1,8 +1,13 @@
 export const state = () => ({
+  $alert: {},
   posts: {}, // 文章缓存，第一次请求后会存储在这里，重复打开时将直接从这里取出。
 })
 
 export const mutations = {
+  initAlert(state, alert) {
+    state.$alert = alert
+  },
+
   setPostCache(state, post) {
     let isExist = !!state.posts[post.id]
     if (isExist) {

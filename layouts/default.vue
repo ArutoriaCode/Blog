@@ -1,6 +1,5 @@
 <template>
   <v-app :class="_AppClass">
-    <Alert ref="alert"></Alert>
     <Account v-model="show"></Account>
     <AppBar></AppBar>
     <v-main>
@@ -23,38 +22,34 @@
 </template>
 
 <script>
-import Account from '~/components/Account/Account.vue';
+import Account from '~/components/Account/Account.vue'
 import AppBar from '~/components/AppBar.vue'
 import Footer from '../components/Footer'
 import offline from '../static/images/offline.png'
-import Alert from '@/components/Alert';
 
 export default {
   components: {
     Account,
     AppBar,
     Footer,
-    Alert
   },
 
   data() {
     return {
       title: 'Arutoria',
-      show: false
+      show: false,
     }
   },
 
   provide() {
     return {
       showAccount: this.showAccount,
-      $alert: {
-        show: (options) => this.showAlert('info', options),
-        success: (options) => this.showAlert('success', options),
-        error: (options) => this.showAlert('error', options),
-        info: (options) => this.showAlert('info', options),
-        warn: (options) => this.showAlert('warn', options),
-      }
     }
+  },
+
+  mounted() {
+    console.log("🚀 ~ file: default.vue ~ line 52 ~ mounted ~ this.$alert", this.$alert.success)
+    this.$alert.success('成功！')
   },
 
   computed: {
@@ -63,18 +58,14 @@ export default {
         pc: !this.$vuetify.breakpoint.mobile,
         mobile: this.$vuetify.breakpoint.mobile,
       }
-    }
+    },
   },
 
   methods: {
     showAccount() {
       this.show = true
     },
-
-    showAlert(type, options) {
-      this.$refs.alert[type](options)
-    }
-  }
+  },
 }
 </script>
 <style lang="scss">

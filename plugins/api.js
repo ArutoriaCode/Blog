@@ -1,6 +1,8 @@
+import handlerException from "~/utils/handlerException"
+
 const dev = process.env.NODE_ENV !== 'production'
 
-export default ({ $axios }, inject) => {
+export default ({ $axios, $alert }, inject) => {
   const api = $axios.create()
 
   api.setBaseURL(
@@ -16,19 +18,25 @@ export default ({ $axios }, inject) => {
       window.localStorage.setItem('token')
     }
 
+    let data = {}
+
     if (typeof response.data === 'object') {
-      return response.data
+      data = response.data
     }
 
     if (response.headers['content-type'].includes('application/json')) {
       if (typeof response.data === 'string') {
         try {
-          return JSON.parse(response.data)
+          data = JSON.parse(response.data)
         } catch (err) {
           
         }
       }
     }
+
+    handlerException(data, $alert)
+
+    return data
   })
 
   inject('api', api)

@@ -19,7 +19,7 @@
             >
           </div>
           <div v-show="!hasError">
-            <div v-if ="isEmpty" :class="_emptyClass">
+            <div v-if ="isEmptyPost" :class="_emptyClass">
               <v-img
                 width="280"
                 height="280"
@@ -48,6 +48,7 @@ import TopCarousel from '@/components/TopCarousel'
 import ArticleList from '@/components/ArticlesList'
 import ArticleCard from '@/components/ArticlesCard'
 import Tags from '@/components/Tags'
+import isEmpty from 'lodash/isEmpty'
 export default {
   components: {
     TopCarousel,
@@ -92,8 +93,8 @@ export default {
       }
     },
 
-    isEmpty() {
-      return this.posts.length === 0
+    isEmptyPost() {
+      return isEmpty(this.posts)
     },
 
     _emptyClass() {

@@ -1,6 +1,6 @@
 <template>
   <v-alert
-    class="top-Alert"
+    class="Top-Alert"
     :type="type"
     :border="border"
     v-model="alert"
@@ -27,7 +27,7 @@ const defaults = {
   outlined: false,
   prominent: false,
   text: false,
-  timeout: 3000,
+  timeout: 10000,
 }
 const types = ['success', 'info', 'warning', 'error']
 export default {
@@ -119,10 +119,25 @@ export default {
 }
 </script>
 <style lang="scss">
-.top-Alert {
+.Top-Alert {
   position: fixed;
   bottom: 24px;
   right: 24px;
   z-index: 1999;
+  &.success {
+    background: #4caf50;
+  }
+  &.error {
+    background: #ff5252;
+  }
+  &.info {
+    background: #2196f3;
+  }
+  &.warning {
+    background: #fb8c00;
+  }
+  .v-alert__content {
+    padding-left: 8px;
+  }
 }
 </style>

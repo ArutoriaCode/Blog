@@ -17,7 +17,7 @@
       <div class="form-field input-required">
         <label>密码</label>
         <v-text-field
-          :type="hidePassowrd ? 'text' : 'password'"
+          :type="!hidePassowrd ? 'text' : 'password'"
           filled
           rounded
           dense
@@ -51,7 +51,13 @@
       </div>
     </div>
     <div class="flex xs12 sm12 text-center">
-      <v-btn large class="next-btn" elevation="0" @click="onRegister" :loading="loading">
+      <v-btn
+        large
+        class="next-btn"
+        elevation="0"
+        @click="onRegister"
+        :loading="loading"
+      >
         <span class="subtitle-2">继续</span>
         <v-icon size="18px" class="ml-2">mdi-arrow-right</v-icon>
       </v-btn>
@@ -60,14 +66,8 @@
 </template>
 <script>
 import { emailRules, passwordRules, usernameRules } from './rules'
-import { Success } from '@/utils/status.js'
+import { SUCCESS } from '@/utils/status.js'
 export default {
-  inject: {
-    $alert: {
-      type: Object
-    }
-  },
-
   data: () => ({
     hidePassowrd: true,
     emailRules,
@@ -84,7 +84,7 @@ export default {
     onRegister() {
       const allowRegister = this.$refs['registerForm'].validate()
       if (!allowRegister) {
-        this.$alert.error('不行不行不行！')
+        this.$store.state.$alert.error('不行不行不行！')
         return
       }
 
@@ -97,7 +97,9 @@ export default {
           username: this.username,
         })
         .then((rsp) => {
-          if (rsp.code === Success) {
+          if (rsp.code === SUCCESS) {
+            this.$store.state.$alert.success('注册成功！')
+            this.loading = false
           }
         })
     },
