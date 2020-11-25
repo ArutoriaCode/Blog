@@ -1,5 +1,6 @@
 <template>
   <v-app :class="_AppClass">
+    <Alert ref="alert"></Alert>
     <Account v-model="show"></Account>
     <AppBar></AppBar>
     <v-main>
@@ -22,16 +23,18 @@
 </template>
 
 <script>
+import Account from '~/components/Account/Account.vue';
 import AppBar from '~/components/AppBar.vue'
-import Account from '~/components/Account.vue';
 import Footer from '../components/Footer'
 import offline from '../static/images/offline.png'
+import Alert from '@/components/Alert';
 
 export default {
   components: {
     Account,
     AppBar,
-    Footer
+    Footer,
+    Alert
   },
 
   data() {
@@ -43,7 +46,14 @@ export default {
 
   provide() {
     return {
-      showAccount: this.showAccount
+      showAccount: this.showAccount,
+      $alert: {
+        show: (options) => this.showAlert('info', options),
+        success: (options) => this.showAlert('success', options),
+        error: (options) => this.showAlert('error', options),
+        info: (options) => this.showAlert('info', options),
+        warn: (options) => this.showAlert('warn', options),
+      }
     }
   },
 
@@ -59,7 +69,10 @@ export default {
   methods: {
     showAccount() {
       this.show = true
-      console.log("🚀 ~ file: default.vue ~ line 62 ~ showAccount ~ this.show", this.show)
+    },
+
+    showAlert(type, options) {
+      this.$refs.alert[type](options)
     }
   }
 }
