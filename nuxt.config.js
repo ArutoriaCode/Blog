@@ -84,6 +84,7 @@ export default {
         },
       },
     },
+    // https://vuetifyjs.com/zh-Hans/features/breakpoints/
     breakpoint: {
       mobileBreakpoint: 1264,
     },
