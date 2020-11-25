@@ -1,9 +1,16 @@
 <template>
-  <v-form class="main-form">
+  <v-form class="main-form" ref="registerForm" lazy-validation>
     <div class="flex xs12 sm12">
       <div class="form-field input-required">
         <label>邮箱</label>
-        <v-text-field filled rounded dense></v-text-field>
+        <v-text-field
+          :rules="emailRules"
+          v-model="email"
+          filled
+          rounded
+          dense
+          required
+        />
       </div>
     </div>
     <div class="flex xs12 sm12">
@@ -14,6 +21,8 @@
           filled
           rounded
           dense
+          :rules="passwordRules"
+          v-model="password"
         >
           <template slot="append-outer">
             <v-btn
@@ -32,11 +41,17 @@
     <div class="flex xs12 sm12">
       <div class="form-field input-required">
         <label>昵称</label>
-        <v-text-field filled rounded dense></v-text-field>
+        <v-text-field
+          v-model="username"
+          :rules="usernameRules"
+          filled
+          rounded
+          dense
+        />
       </div>
     </div>
     <div class="flex xs12 sm12 text-center">
-      <v-btn large class="next-btn" elevation="0">
+      <v-btn large class="next-btn" elevation="0" @click="onRegister" :loading="loading">
         <span class="subtitle-2">继续</span>
         <v-icon size="18px" class="ml-2">mdi-arrow-right</v-icon>
       </v-btn>
@@ -44,10 +59,49 @@
   </v-form>
 </template>
 <script>
+import { emailRules, passwordRules, usernameRules } from './rules'
+import { Success } from '@/utils/status.js'
 export default {
+  inject: {
+    $alert: {
+      type: Object
+    }
+  },
+
   data: () => ({
-    hidePassowrd: true
-  })
+    hidePassowrd: true,
+    emailRules,
+    passwordRules,
+    usernameRules,
+    loading: false,
+
+    email: '',
+    password: '',
+    username: '',
+  }),
+
+  methods: {
+    onRegister() {
+      const allowRegister = this.$refs['registerForm'].validate()
+      if (!allowRegister) {
+        this.$alert.error('不行不行不行！')
+        return
+      }
+
+      this.loading = true
+
+      this.$api
+        .post('/user/register', {
+          email: this.email,
+          password: this.password,
+          username: this.username,
+        })
+        .then((rsp) => {
+          if (rsp.code === Success) {
+          }
+        })
+    },
+  },
 }
 </script>
 <style lang="scss">

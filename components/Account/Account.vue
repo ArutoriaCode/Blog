@@ -4,7 +4,7 @@
     v-model="dialog"
     persistent
     :fullscreen="$vuetify.breakpoint.name === 'xs'"
-    transition="scroll-y-transition"
+    transition="scroll-y-reverse-transition"
   >
     <v-card class="account-card">
       <div class="back-header">

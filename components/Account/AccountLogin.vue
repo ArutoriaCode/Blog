@@ -1,9 +1,9 @@
 <template>
-  <v-form class="main-form">
+  <v-form class="main-form" lazy-validation>
     <div class="flex xs12 sm12">
       <div class="form-field input-required">
         <label>邮箱</label>
-        <v-text-field filled rounded dense></v-text-field>
+        <v-text-field :rules="emailRules" filled rounded dense />
       </div>
     </div>
     <div class="flex xs12 sm12">
@@ -14,6 +14,7 @@
           filled
           rounded
           dense
+          :rules="passwordRules"
         >
           <template slot="append-outer">
             <v-btn
@@ -38,10 +39,13 @@
   </v-form>
 </template>
 <script>
+import { emailRules, passwordRules } from './rules'
 export default {
   data: () => ({
-    hidePassowrd: true
-  })
+    hidePassowrd: true,
+    emailRules,
+    passwordRules,
+  }),
 }
 </script>
 <style lang="scss">
