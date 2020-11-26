@@ -72,8 +72,9 @@
 </template>
 <script>
 import { emailRules, passwordRules, usernameRules } from './rules'
-import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/utils/codes.js'
+import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/config/codes.js'
 import intercept from '@/mixins/intercept'
+import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '~/config/keys'
 export default {
   mixins: [intercept],
   data: () => ({
@@ -119,15 +120,11 @@ export default {
             return Promise.reject()
           }
 
-          const { access_token, refresh_token } = rsp.data
-          localStorage.setItem('access_token', access_token)
-          localStorage.setItem('_refresh_access_token', refresh_token)
-          this.$emit('onClose')
-        }).catch(err => {
-          this.loading = false
-          if (!err) {
-            this.$alert.error('凉凉，不知道出啥错了。')
-          }
+          const { token, user } = rsp.data
+          this.$cookies.set(ACCESS_TOKEN, token.access_token)
+          this.$cookies.set(REFRESH_ACCESS_TOKEN, token.refresh_token)
+          this.$cookies.set(USER_INFO, user)
+          this.$emit('onCloseAccount')
         })
     },
   },

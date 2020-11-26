@@ -26,16 +26,25 @@
       </div>
       <div class="nav-bar-header-avatar">
         <v-avatar size="128">
-          <v-img :src="require('~/static/images/Elaina.jpg')" alt="" />
+          <v-img :src="avatar || require('~/static/images/Delta.jpg')" alt="" />
         </v-avatar>
-        <v-list-item-title class="title"> Elaina </v-list-item-title>
+        <v-list-item-title class="title">
+          <v-icon>mdi-account</v-icon>
+          <span class="username">{{ username }}</span>
+        </v-list-item-title>
       </div>
     </div>
     <div class="nav-container">
       <div class="nav-content">
         <v-list>
           <v-list-item-group>
-            <v-list-item v-for="route in routes" :to="route.to" :key="route.value" class="rounded" nuxt>
+            <v-list-item
+              v-for="route in routes"
+              :to="route.to"
+              :key="route.value"
+              class="rounded"
+              nuxt
+            >
               <v-list-item-icon>
                 <v-icon>{{ route.icon }}</v-icon>
               </v-list-item-icon>
@@ -48,12 +57,30 @@
       </div>
     </div>
     <div slot="append" class="container">
-      <v-btn block rounded color="primary" @click.stop="_showAccount">登录</v-btn>
+      <v-btn
+        block
+        rounded
+        color="primary"
+        v-if="!authority"
+        @click.stop="_showAccount"
+        >登录</v-btn
+      >
+      <div class="authority" v-if="authority">
+        <v-btn text>
+          <v-icon>mdi-cog</v-icon>
+          设置
+        </v-btn>
+        <v-btn text>
+          <v-icon>mdi-exit-to-app</v-icon>
+          退出
+        </v-btn>
+      </div>
     </div>
   </v-navigation-drawer>
 </template>
 <script>
 import routes from '../config/routes'
+import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
     value: Boolean,
@@ -62,17 +89,19 @@ export default {
   data() {
     return {
       drawer: this.value,
-      routes
+      routes,
     }
   },
 
   inject: {
     showAccount: {
-      type: Function
-    }
+      type: Function,
+    },
   },
 
   computed: {
+    ...mapGetters(['authority', 'username', 'avatar']),
+
     _drawer: {
       set(value) {
         this.drawer = value
@@ -94,8 +123,8 @@ export default {
     _showAccount() {
       this._drawer = false
       this.showAccount()
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
@@ -130,6 +159,13 @@ export default {
         margin-top: 18px;
         font-family: 'UniNeue' !important;
         font-weight: bold;
+        display: flex;
+        flex-direction: row;
+        justify-content: baseline;
+        .username {
+          display: inline-block;
+          margin-left: 4px;
+        }
       }
     }
 
@@ -173,6 +209,21 @@ export default {
       .v-list-item--active::before {
         opacity: 0 !important;
       }
+    }
+  }
+
+  .authority {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .v-btn .v-icon {
+      margin-right: 8px;
+    }
+    .v-btn.theme--light {
+      color: #ffffff;
+    }
+    .v-btn.theme--dark {
+      color: #ffffff;
     }
   }
 

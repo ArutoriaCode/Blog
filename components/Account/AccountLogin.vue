@@ -59,8 +59,9 @@
 </template>
 <script>
 import intercept from '~/mixins/intercept'
-import { LOGIN_SUCEESS } from '@/utils/codes.js'
+import { LOGIN_SUCEESS } from '@/config/codes.js'
 import { emailRules, passwordRules } from './rules'
+import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '@/config/keys'
 export default {
   mixins: [intercept],
   data: () => ({
@@ -97,10 +98,11 @@ export default {
             return Promise.reject()
           }
 
-          const { access_token, refresh_token } = rsp.data
-          localStorage.setItem('access_token', access_token)
-          localStorage.setItem('_refresh_access_token', refresh_token)
-          this.$emit('onClose')
+          const { token, user } = rsp.data
+          this.$cookies.set(ACCESS_TOKEN, token.access_token)
+          this.$cookies.set(REFRESH_ACCESS_TOKEN, token.refresh_token)
+          this.$cookies.set(USER_INFO, user)
+          this.$emit('onCloseAccount')
         })
         .catch((err) => {
           this.loading = false

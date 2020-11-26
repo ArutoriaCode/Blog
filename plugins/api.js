@@ -1,24 +1,37 @@
-import clientHandlerException from "~/utils/clientHandlerException"
-
+import Vue from 'vue'
+import VueCookies from 'vue-cookies'
+import clientHandlerException from '~/utils/clientHandlerException'
+import { ACCESS_TOKEN } from '~/config/keys'
 const dev = process.env.NODE_ENV !== 'production'
+
+Vue.use(VueCookies)
 
 export default (ctx, inject) => {
   const api = ctx.$axios.create()
-
   api.setBaseURL(
-    // dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
-    dev ? 'http://192.168.124.3:6140/api/v1/' : 'http://arutoria.com/api/v1/'
+    dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
+    // dev ? 'http://192.168.124.3:6140/api/v1/' : 'http://arutoria.com/api/v1/'
   )
 
   api.setHeader('Content-Type', 'application/json', ['post'])
-
-  api.onResponse((response) => {
-    if (response.data && response.data.code === 6666) {
-      // 设置Token
-      api.setToken(response.data.data, 'Bearer', ['post'])
-      window.localStorage.setItem('token')
+  ctx.notAuthRequest = null
+  ctx.$cookies = Vue.$cookies
+  api.onRequest(config => {
+    if (!process.client) {
+      return config
     }
 
+    const access_token = ctx.$cookies.get(ACCESS_TOKEN)
+    if (access_token) {
+      api.setToken(access_token, 'Bearer')
+    }
+
+    if (dev) {
+      console.log('clinet request config ->', config)
+    }
+  })
+
+  api.onResponse(async (response) => {
     let data = {}
 
     if (typeof response.data === 'object') {
@@ -29,14 +42,20 @@ export default (ctx, inject) => {
       if (typeof response.data === 'string') {
         try {
           data = JSON.parse(response.data)
-        } catch (err) {
-          
-        }
+        } catch (err) {}
       }
     }
 
-    if (process.client) {
-      clientHandlerException(data, ctx.$alert)
+    const { url, method } = response.config
+    const isRefreshToken = url === '/refresh' && method === 'post'
+    if (process.client && !isRefreshToken) {
+      // 把本次请求的参数配置存储
+      const _response = { ...response, data }
+      const result = await clientHandlerException(_response, ctx)
+      if (!!result) {
+        console.warn('【重新请求】', result)
+        return result
+      }
     }
 
     return data

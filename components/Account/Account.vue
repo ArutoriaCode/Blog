@@ -16,7 +16,7 @@
         <header>
           <div class="top">
             <h2 class="d-flex flex-row justify-space-between">
-              欢迎回来，
+              {{ topTitle }}
               <v-btn text color="red accent-2" v-if="isLogin" @click.stop="isLogin = false"> 注册 </v-btn>
               <v-btn text color="red accent-2" v-else @click.stop="isLogin = true"> 登录 </v-btn>
             </h2>
@@ -24,13 +24,14 @@
             <h3 v-else>请填写以下信息进行注册</h3>
           </div>
         </header>
-        <AccountLogin v-show="isLogin" @onClose="closeAccount"></AccountLogin>
-        <AccountRegister v-show="!isLogin" @onClose="closeAccount"></AccountRegister>
+        <AccountLogin v-show="isLogin" @onCloseAccount="closeAccount"></AccountLogin>
+        <AccountRegister v-show="!isLogin" @onCloseAccount="closeAccount"></AccountRegister>
       </div>
     </v-card>
   </v-dialog>
 </template>
 <script>
+import { USER_INFO } from '~/config/keys'
 import AccountLogin from './AccountLogin'
 import AccountRegister from './AccountRegister'
 export default {
@@ -46,7 +47,6 @@ export default {
   data() {
     return {
       dialog: false,
-
       email: '',
       password: '',
       isLogin: true
@@ -68,8 +68,17 @@ export default {
     }
   },
 
+  computed: {
+    topTitle() {
+      return this.isLogin ? '欢迎回来，' : '欢迎您，'
+    }
+  },
+
   methods: {
     closeAccount() {
+      console.log("🚀 ~ file: Account.vue ~ line 80 ~ closeAccount ~ this.$cookies", this.$cookies)
+      const userInfo = this.$cookies.get(USER_INFO)
+      this.$store.commit('setUserInfo', userInfo)
       this.dialog = false
     }
   }

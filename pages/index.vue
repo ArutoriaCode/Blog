@@ -49,6 +49,7 @@ import ArticleList from '@/components/ArticlesList'
 import ArticleCard from '@/components/ArticlesCard'
 import Tags from '@/components/Tags'
 import isEmpty from 'lodash/isEmpty'
+import { USER_INFO } from '~/config/keys'
 export default {
   components: {
     TopCarousel,
@@ -60,6 +61,13 @@ export default {
   data() {
     return {
       hasError: false,
+    }
+  },
+
+  beforeMount() {
+    const user = this.$cookies.get(USER_INFO)
+    if (user && user.id) {
+      this.$store.commit('setUserInfo', user)
     }
   },
 

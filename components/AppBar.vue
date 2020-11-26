@@ -51,9 +51,31 @@
           depressed
           color="saber"
           @click.stop="showAccount"
+          v-if="!authority"
         >
           登录
         </v-btn>
+        <v-menu :class="_mobileHideClass" close-on-click offset-y v-else>
+          <template v-slot:activator="{ on, attrs }">
+            <v-avatar size="36" v-bind="attrs" v-on="on">
+              <v-img
+                :src="avatar || require('~/static/images/Delta.jpg')"
+                alt=""
+              />
+            </v-avatar>
+          </template>
+
+          <v-list class="_menu_list" dense>
+            <v-list-item link>
+              <v-icon size="20">mdi-cog</v-icon>
+              设置
+            </v-list-item>
+            <v-list-item link>
+              <v-icon size="20">mdi-exit-to-app</v-icon>
+              退出
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-btn
           depressed
           text
@@ -71,6 +93,8 @@
 <script>
 import Tabs from './Tabs'
 import LeftNavigation from './LeftNavigation'
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     Tabs,
@@ -80,17 +104,19 @@ export default {
   data() {
     return {
       title: 'Arutoria',
-      showLeftNavigation: false
+      showLeftNavigation: false,
     }
   },
 
   inject: {
     showAccount: {
-      type: Function
-    }
+      type: Function,
+    },
   },
 
   computed: {
+    ...mapGetters(['authority', 'avatar']),
+
     _mobileHideClass() {
       return 'd-none d-xl-flex d-lg-flex ma-1'
     },
@@ -115,7 +141,7 @@ export default {
 
       const id = this.$route.params.id
       return this.$store.state.posts[id].comment || 0
-    }
+    },
   },
 
   methods: {
@@ -139,6 +165,11 @@ export default {
   }
   i.theme--dark {
     color: #ffffff !important;
+  }
+}
+.v-list._menu_list {
+  .v-list-item .v-icon {
+    margin-right: 8px;
   }
 }
 </style>
