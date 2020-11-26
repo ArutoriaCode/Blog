@@ -76,7 +76,6 @@ export default {
 
   methods: {
     closeAccount() {
-      console.log("🚀 ~ file: Account.vue ~ line 80 ~ closeAccount ~ this.$cookies", this.$cookies)
       const userInfo = this.$cookies.get(USER_INFO)
       this.$store.commit('setUserInfo', userInfo)
       this.dialog = false

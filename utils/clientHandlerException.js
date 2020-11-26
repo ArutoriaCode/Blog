@@ -56,10 +56,6 @@ export default async (_response, ctx) => {
   }
 
   const { code } = _response.data
-  console.log(
-    '🚀 ~ file: clientHandlerException.js ~ line 45 ~ _response.data',
-    _response.data
-  )
   switch (code) {
     case LOGIN_SUCEESS:
       ctx.$alert.success('登录成功！')
