@@ -64,8 +64,8 @@ export default {
 }
 </script>
 <style lang="scss">
-.error-alert-text {
-  font-size: 30px;
-  font-size: 2rem;
+.v-subheader.error-alert-text {
+  font-size: 30px !important;
+  font-size: 2rem !important;
 }
 </style>
