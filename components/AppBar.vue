@@ -55,9 +55,9 @@
         >
           登录
         </v-btn>
-        <v-menu :class="_mobileHideClass" close-on-click offset-y v-else>
+        <v-menu close-on-click offset-y v-else>
           <template v-slot:activator="{ on, attrs }">
-            <v-avatar size="36" v-bind="attrs" v-on="on">
+            <v-avatar :class="_mobileHideClass" size="36" v-bind="attrs" v-on="on">
               <v-img
                 :src="avatar || require('~/static/images/Delta.jpg')"
                 alt=""
