@@ -39,8 +39,11 @@ async function checkAndGetNewToken(_response, ctx) {
       ctx.$cookies.remove(ACCESS_TOKEN)
       ctx.$cookies.remove(REFRESH_ACCESS_TOKEN)
       ctx.$cookies.remove(USER_INFO, user)
-      ctx.$alert.error('登录过期了，请重新登录吧')
-      ctx.$router.replace('/')
+
+      ctx.$alert.error('登录过期了，请重新登录吧!')
+      setTimeout(() => {
+        ctx.$router.replace('/')
+      }, 3000)
     })
 }
 
