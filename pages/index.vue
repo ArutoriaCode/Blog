@@ -32,7 +32,7 @@
                 v-for="post in posts"
                 :key="post.id"
                 :post="post"
-              ></ArticleCard>
+              />
             </div>
           </ArticleList>
           <Tags :class="_TagsClass"></Tags>

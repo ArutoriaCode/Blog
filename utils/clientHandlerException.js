@@ -2,13 +2,11 @@ import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '~/config/keys'
 import {
   EXIST_USER,
   LOGIN_SUCEESS,
-  PARAMS_ERROR,
   SUCCESS,
   REGISTER_SUCCESS,
   INVALID_OR_EXPIRED_TOKEN,
   INVALID_TOKEN,
-  NOT_EXIST_USER_OR_PASSWORD_ERROR,
-  SERVER_ERROR
+  NOT_EXIST_USER_OR_PASSWORD_ERROR
 } from '../config/codes'
 
 async function checkAndGetNewToken(_response, ctx) {
@@ -70,12 +68,6 @@ export default async (_response, ctx) => {
       return
     case REGISTER_SUCCESS:
       ctx.$alert.success('注册成功，将为你自动登录')
-      return
-    case PARAMS_ERROR:
-      ctx.$alert.error('请求参数有误！')
-      return
-    case SERVER_ERROR:
-      ctx.$alert.error('服务器炸了！')
       return
     case INVALID_OR_EXPIRED_TOKEN:
       return await checkAndGetNewToken(_response, ctx)

@@ -20,10 +20,14 @@
 </template>
 
 <script>
+import isEmpty from 'lodash/isEmpty'
 import Account from '~/components/Account/Account.vue'
 import AppBar from '~/components/AppBar.vue'
 import Footer from '../components/Footer'
 import offline from '../static/images/offline.png'
+import { SUCCESS } from '~/config/codes'
+import { mapGetters } from 'vuex'
+import { ACCESS_TOKEN } from '~/config/keys'
 
 export default {
   components: {
@@ -39,6 +43,14 @@ export default {
     }
   },
 
+  beforeMount() {
+    const access_token = this.$cookies.get(ACCESS_TOKEN)
+    if (access_token) {
+      this.$api.setToken(access_token, 'Bearer')
+      this.updateLikes()
+    }
+  },
+
   provide() {
     return {
       showAccount: this.showAccount,
@@ -46,6 +58,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(['authority']),
     _AppClass() {
       return {
         pc: !this.$vuetify.breakpoint.mobile,
@@ -54,10 +67,33 @@ export default {
     },
   },
 
+  watch: {
+    authority (value) {
+      if (value === true) {
+        this.updateLikes()
+      }
+    }
+  },
+
   methods: {
     showAccount() {
       this.show = true
     },
+
+    updateLikes() {
+      const isLogin = !isEmpty(this.$store.state.user)
+      const hasLikes = !isEmpty(this.$store.state.likes)
+      if (isLogin && hasLikes) {
+        return
+      }
+
+      // 获取当前登录用户全部点赞的信息
+      this.$api.get('/like/all').then(rsp => {
+        if (rsp.code === SUCCESS) {
+          this.$store.commit('setLikes', rsp.data)
+        }
+      });
+    }
   },
 }
 </script>

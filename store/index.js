@@ -2,12 +2,13 @@ import validate from '~/utils/validate'
 
 export const state = () => ({
   user: {},
+  likes: [], // 当前用户的点赞信息，以type-typeId进行存储，type为类型（点赞的是评论还是文章），typeId是评论或文章id
   posts: {}, // 文章缓存，第一次请求后会存储在这里，重复打开时将直接从这里取出。
 })
 
 export const getters = {
   authority(state) {
-    return state.user.id && state.user.email
+    return !!(state.user.id && state.user.email)
   },
 
   username(state) {
@@ -30,6 +31,10 @@ export const getters = {
 export const mutations = {
   setUserInfo(state, user) {
     state.user = user
+  },
+
+  setLikes(state, likes) {
+    state.likes = likes
   },
 
   setPostCache(state, post) {

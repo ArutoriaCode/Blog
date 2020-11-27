@@ -22,7 +22,7 @@
         <template v-if="isPost">
           <v-btn class="px-2 _post" depressed text small>
             <v-icon class="animate__animated animate__heartBeat animate__slower animate__infinite"> mdi-heart </v-icon>
-            <span class="pl-1 font-unineue-bold">{{ heart }}</span>
+            <span class="pl-1 font-unineue-bold">{{ likeNum }}</span>
           </v-btn>
           <v-btn
             class="px-2 _post"
@@ -131,13 +131,13 @@ export default {
       return this.$store.state.posts[this.$route.params.id]
     },
 
-    heart() {
+    likeNum() {
       if (!this.isPost) {
         return 0
       }
 
-      if (this.currentPost && this.currentPost.heart >= 0) {
-        return this.currentPost.heart
+      if (this.currentPost && this.currentPost.likeNum >= 0) {
+        return this.currentPost.likeNum
       }
 
       return 0
