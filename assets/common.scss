@@ -4,8 +4,13 @@
 }
 
 @font-face {
-  font-family: "UniNeue-HeavyItalic";
+  font-family: "UniNeue-bold";
   src: url('../static/fonts/UniNeue-HeavyItalic.ttf');
+}
+
+@font-face {
+  font-family: "Pixer";
+  src: url('../static//fonts/Pixer-Regular.ttf')
 }
 
 // @font-face {
@@ -79,3 +84,11 @@
   font-family: "UniNeue" !important;
 }
 
+.font-unineue-bold {
+  font-family: "UniNeue-bold" !important;
+}
+
+.font-pixer {
+  font-family: "Pixer" !important;
+  font-size: 16px;
+}
