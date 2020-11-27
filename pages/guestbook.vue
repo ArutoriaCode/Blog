@@ -41,7 +41,7 @@
       <div slot="prepend">
         <v-img :src="require('~/static/images/comment_empty.png')" width="248"></v-img>
       </div>
-      <v-subheader class="font-unineue">NOT COMMENT</v-subheader>
+      <v-subheader class="font-unineue text-no-wrap">NOT COMMENT</v-subheader>
     </v-alert>
   </div>
 </template>
