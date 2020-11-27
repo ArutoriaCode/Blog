@@ -4,7 +4,7 @@
     <v-textarea solo name="input-7-4" flat label="留下你的足迹..."></v-textarea>
     <div class="flex-middle-between mb-2">
       <v-subheader class="subinfo">欢迎留言</v-subheader>
-      <v-btn color="primary" small>请先登录</v-btn>
+      <v-btn color="primary" small @click="showAccount">请先登录</v-btn>
     </div>
     <v-card flat v-if="comments.length > 0">
       <div class="guestbook-item" v-for="comment in comments" :key="comment.id">
@@ -37,15 +37,11 @@
         <v-divider></v-divider>
       </div>
     </v-card>
-    <v-alert prominent class="mt-4 empty-alert" v-else>
+    <v-alert prominent class="empty-alert pa-16" v-else>
       <div slot="prepend">
-        <v-img :src="require('~/static/images/empty.png')" width="248"></v-img>
+        <v-img :src="require('~/static/images/comment_empty.png')" width="248"></v-img>
       </div>
-      <v-subheader>还没有人在这里留言，不妨留个言？</v-subheader>
-      <v-btn text outlined>
-        <v-icon left>mdi-pencil</v-icon>
-        这就来
-      </v-btn>
+      <v-subheader class="font-unineue">NOT COMMENT</v-subheader>
     </v-alert>
   </div>
 </template>
@@ -55,65 +51,19 @@ export default {
     comments: [],
   }),
 
+  inject: {
+    showAccount: {
+      type: Function
+    }
+  },
+
   asyncData() {
-    return new Promise((reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
-        return reject({
-          comments: [
-            {
-              id: 179,
-              commentId: 176,
-              toId: 93,
-              toName: 'begonia',
-              fromId: 1,
-              lastId: null,
-              fromName: 'vpt',
-              avatarUrl:
-                'https://oss-cdn.yevpt.com/avatar/user/1556e77a1cc8be20aca60deb063c731f.jpeg?a=5ea43876213bad18bf8ed7de98b841d1&b=5f811f51',
-              likeNum: 0,
-              content: '静态文本',
-              dateCreate: '2020-09-24 09:24',
-              dateModifed: '2020-09-24 09:24',
-              isUse: '01',
-              isLiked: null,
-            },
-            {
-              id: 180,
-              commentId: 176,
-              toId: 1,
-              toName: 'vpt',
-              fromId: 93,
-              lastId: null,
-              fromName: 'begonia',
-              avatarUrl: '',
-              likeNum: 0,
-              content:
-                '静态文本',
-              dateCreate: '2020-09-24 13:21',
-              dateModifed: '2020-09-24 13:21',
-              isUse: '01',
-              isLiked: null,
-            },
-            {
-              id: 181,
-              commentId: 176,
-              toId: 93,
-              toName: 'begonia',
-              fromId: 1,
-              lastId: null,
-              fromName: 'vpt',
-              avatarUrl:
-                'https://oss-cdn.yevpt.com/avatar/user/1556e77a1cc8be20aca60deb063c731f.jpeg?a=5ea43876213bad18bf8ed7de98b841d1&b=5f811f51',
-              likeNum: 0,
-              content: '静态文本',
-              dateCreate: '2020-09-24 21:11',
-              dateModifed: '2020-09-24 21:11',
-              isUse: '01',
-              isLiked: null,
-            },
-          ],
+        return resolve({
+          comments: [],
         })
-      }, 800)
+      }, 500)
     })
   },
 }
@@ -134,6 +84,9 @@ export default {
     }
     .v-alert__content {
       text-align: center;
+    }
+    .v-subheader.font-unineue {
+      margin-top: 24px;
     }
   }
   .guestbook-item > * {

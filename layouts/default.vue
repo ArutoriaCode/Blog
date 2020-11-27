@@ -13,9 +13,7 @@
           >You Are Offline</v-subheader
         >
       </div>
-      <v-container v-show="!$nuxt.isOffline">
-        <nuxt class="index-container" />
-      </v-container>
+      <nuxt v-show="!$nuxt.isOffline" />
     </v-main>
     <Footer></Footer>
   </v-app>
@@ -64,7 +62,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.v-subheader.error-alert-text {
+.v-subheader.error-alert-text, .v-subheader.font-unineue {
   font-size: 30px !important;
   font-size: 2rem !important;
 }

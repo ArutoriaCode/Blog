@@ -121,23 +121,23 @@ export default {
 <style lang="scss">
 .Top-Alert {
   position: fixed !important;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1999;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 4999 !important;
   &.success {
-    background: #4caf50;
+    background: #4caf50 !important;
   }
   &.error {
-    background: #ff5252;
+    background: #ff5252 !important;
   }
   &.info {
-    background: #2196f3;
+    background: #2196f3 !important;
   }
   &.warning {
-    background: #fb8c00;
+    background: #fb8c00 !important;
   }
   .v-alert__content {
-    padding-left: 8px;
+    padding-left: 8px !important;
   }
 }
 </style>

@@ -10,6 +10,8 @@ const SERVER_ERROR = 1500;
 const LOGIN_SUCEESS = 6000;
 /** 该用户已存在 */
 const EXIST_USER = 6001;
+/** 用户不存在或账号密码错误 */
+const NOT_EXIST_USER_OR_PASSWORD_ERROR = 6011;
 /** 注册成功并会返回token */
 const REGISTER_SUCCESS = 6100;
 /** 令牌无效或过期 */
@@ -34,6 +36,7 @@ export {
   SERVER_ERROR,
   LOGIN_SUCEESS,
   EXIST_USER,
+  NOT_EXIST_USER_OR_PASSWORD_ERROR,
   REGISTER_SUCCESS,
   INVALID_OR_EXPIRED_TOKEN,
   INVALID_TOKEN,

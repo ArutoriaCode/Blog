@@ -38,6 +38,10 @@ export default (ctx, inject) => {
       data = response.data
     }
 
+    if (dev) {
+      console.log('clinet response ->', data)
+    }
+
     if (response.headers['content-type'].includes('application/json')) {
       if (typeof response.data === 'string') {
         try {

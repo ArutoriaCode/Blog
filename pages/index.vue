@@ -1,46 +1,45 @@
 <template>
-  <v-row class="pageIndex">
-    <TopCarousel></TopCarousel>
-    <v-col cols="12">
-      <v-row>
-        <ArticleList>
-          <div
-            :class="_ArticleCardClass"
-            v-show="hasError"
-          >
-            <v-img
-              width="280"
-              height="280"
-              contain
-              :src="require('~/static/images/error.png')"
-            ></v-img>
-            <v-subheader class="error-alert-text font-unineue mt-2"
-              >GET POSTS ERROR</v-subheader
-            >
-          </div>
-          <div v-show="!hasError">
-            <div v-if ="isEmptyPost" :class="_emptyClass">
+  <div class="index-container">
+    <v-row class="pageIndex">
+      <TopCarousel></TopCarousel>
+      <v-col cols="12">
+        <v-row>
+          <ArticleList>
+            <div :class="_ArticleCardClass" v-show="hasError">
               <v-img
                 width="280"
                 height="280"
                 contain
-                :src="require('~/static/images/empty.png')"
+                :src="require('~/static/images/error.png')"
               ></v-img>
               <v-subheader class="error-alert-text font-unineue mt-2"
-                >EMPTY DATA</v-subheader
+                >GET POSTS ERROR</v-subheader
               >
             </div>
-            <ArticleCard
-              v-for="post in posts"
-              :key="post.id"
-              :post="post"
-            ></ArticleCard>
-          </div>
-        </ArticleList>
-        <Tags :class="_TagsClass"></Tags>
-      </v-row>
-    </v-col>
-  </v-row>
+            <div v-show="!hasError">
+              <div v-if="isEmptyPost" :class="_emptyClass">
+                <v-img
+                  width="280"
+                  height="280"
+                  contain
+                  :src="require('~/static/images/empty.png')"
+                ></v-img>
+                <v-subheader class="error-alert-text font-unineue mt-2"
+                  >EMPTY DATA</v-subheader
+                >
+              </div>
+              <ArticleCard
+                v-for="post in posts"
+                :key="post.id"
+                :post="post"
+              ></ArticleCard>
+            </div>
+          </ArticleList>
+          <Tags :class="_TagsClass"></Tags>
+        </v-row>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -76,10 +75,10 @@ export default {
       const posts = await $api.get('/posts')
       return {
         posts: posts.data,
-        test: false
+        test: false,
       }
     } catch (error) {
-      console.error("Get Post Error:", error)
+      console.error('Get Post Error:', error)
       return {
         posts: [],
         hasError: true,
@@ -107,7 +106,7 @@ export default {
 
     _emptyClass() {
       return 'd-flex _post-card flex-column justify-center align-center'
-    }
+    },
   },
 }
 </script>

@@ -20,19 +20,19 @@
       <!-- Right Start -->
       <div class="toolbar-right-content align-center">
         <template v-if="isPost">
-          <v-btn class="px-2" depressed text small>
-            <v-icon> mdi-heart </v-icon>
-            <span class="pl-1 body-2">{{ heart }}</span>
+          <v-btn class="px-2 _post" depressed text small>
+            <v-icon class="animate__animated animate__heartBeat animate__slower animate__infinite"> mdi-heart </v-icon>
+            <span class="pl-1 font-unineue-bold">{{ heart }}</span>
           </v-btn>
           <v-btn
-            class="px-2"
+            class="px-2 _post"
             depressed
             text
             small
             @click.stop="onScrollToComment"
           >
             <v-icon> mdi-message-processing </v-icon>
-            <span class="pl-1 body-2">{{ comment }}</span>
+            <span class="pl-1 font-unineue-bold">{{ comment }}</span>
           </v-btn>
         </template>
         <v-btn
@@ -66,11 +66,11 @@
           </template>
 
           <v-list class="_menu_list" dense>
-            <v-list-item link>
+            <v-list-item link @click="onSetting">
               <v-icon size="20">mdi-cog</v-icon>
               设置
             </v-list-item>
-            <v-list-item link>
+            <v-list-item link @click="onLogout">
               <v-icon size="20">mdi-exit-to-app</v-icon>
               退出
             </v-list-item>
@@ -93,6 +93,7 @@
 <script>
 import Tabs from './Tabs'
 import LeftNavigation from './LeftNavigation'
+import logout from '../utils/logout.js'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -105,6 +106,7 @@ export default {
     return {
       title: 'Arutoria',
       showLeftNavigation: false,
+      onLogout: logout.bind(this)
     }
   },
 
@@ -125,13 +127,20 @@ export default {
       return this.$nuxt.$route.name === 'post-id'
     },
 
+    currentPost() {
+      return this.$store.state.posts[this.$route.params.id]
+    },
+
     heart() {
       if (!this.isPost) {
         return 0
       }
 
-      const id = this.$route.params.id
-      return this.$store.state.posts[id].heart || 0
+      if (this.currentPost && this.currentPost.heart >= 0) {
+        return this.currentPost.heart
+      }
+
+      return 0
     },
 
     comment() {
@@ -139,8 +148,11 @@ export default {
         return 0
       }
 
-      const id = this.$route.params.id
-      return this.$store.state.posts[id].comment || 0
+      if (this.currentPost && this.currentPost.comment >= 0) {
+        return this.currentPost.comment
+      }
+
+      return 0
     },
   },
 
@@ -155,15 +167,19 @@ export default {
         block: 'center',
       })
     },
+
+    onSetting() {
+
+    },
   },
 }
 </script>
 <style lang="scss">
 .toolbar-right-content {
-  i.theme--light {
+  i.theme--light, ._post.theme--light .font-unineue-bold {
     color: #757575 !important;
   }
-  i.theme--dark {
+  i.theme--dark, ._post.theme--dark .font-unineue-bold {
     color: #ffffff !important;
   }
 }

@@ -2,9 +2,8 @@
   <div class="post-main-item-box" elevation="1">
     <v-card class="post-main-item" flat>
       <v-img
-        v-show="post.img"
         :aspect-ratio="16 / 9"
-        :src="post.img"
+        :src="postImg"
         max-width="100%"
         max-height="400px"
       />
@@ -19,15 +18,20 @@
         <div class="d-flex justify-center align-end flex-wrap">
           <v-btn text x-small>
             <v-icon size="20"> mdi-eye </v-icon>
-            <span class="pl-1">{{ post.readCount }}</span>
+            <span class="pl-1 font-pixer">{{ post.readCount }}</span>
           </v-btn>
           <v-btn text x-small>
-            <v-icon size="20"> mdi-heart </v-icon>
-            <span class="pl-1">{{ post.heart }}</span>
+            <v-icon
+              size="20"
+              class="animate__animated animate__heartBeat animate__slower animate__infinite"
+            >
+              mdi-heart
+            </v-icon>
+            <span class="pl-1 font-pixer">{{ post.heart }}</span>
           </v-btn>
           <v-btn text x-small>
             <v-icon size="20"> mdi-message-processing </v-icon>
-            <span class="pl-1">{{ post.commentNum }}</span>
+            <span class="pl-1 font-pixer">{{ post.commentNum }}</span>
           </v-btn>
         </div>
       </v-card-actions>
@@ -42,7 +46,12 @@ export default {
       required: true,
     },
   },
-  data: () => ({}),
+
+  computed: {
+    postImg() {
+      return this.post.img || require('~/static/images/Delta.jpg')
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>

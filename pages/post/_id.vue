@@ -2,10 +2,10 @@
   <div class="post-container">
     <div class="post-bg-img-box">
       <v-img
-        :src="img"
+        :src="postImg"
         width="100%"
         max-height="405px"
-      ></v-img>
+      />
     </div>
     <div class="article-container">
       <div class="article-content">
@@ -14,7 +14,7 @@
           <div>
             <div class="d-flex justify-start align-center">
               <v-avatar size="48">
-                <v-img :src="require('~/static/images/Elaina.jpg')"></v-img>
+                <v-img :src="post.img || require('~/static/images/Delta.jpg')"></v-img>
               </v-avatar>
               <div class="ml-4">
                 <div class="font-weight-regular font-unineue font-weight-bold">
@@ -45,7 +45,8 @@
         ></v-textarea>
       </div>
       <div class="d-flex justify-end">
-        <v-btn color="saber" small>请先登录</v-btn>
+        <v-btn color="saber" small v-if="!authority" @click="showAccount">请先登录</v-btn>
+        <v-btn color="amber lighten-3" text small v-if="authority">评论</v-btn>
       </div>
     </v-card>
     <v-divider></v-divider>
@@ -56,6 +57,7 @@
 import dayjs from 'dayjs'
 import isSafeInteger from 'lodash/isSafeInteger'
 import get from 'lodash/get'
+import { mapGetters } from 'vuex'
 
 export default {
   async asyncData({ $api, params, store }) {
@@ -78,19 +80,34 @@ export default {
     }
   },
 
+  inject: {
+    showAccount: {
+      type: Function
+    }
+  },
+
   computed: {
-    img() {
+    ...mapGetters(['authority']),
+    postImg() {
       if (this.post && this.post.img) {
         return this.post.img
       }
 
-      return require('~/static/images/empty.png')
+      return require('~/static/images/post_default.jpg')
+    },
+
+    postTitle() {
+      if (this.post && this.post.title) {
+        return this.post.title
+      }
+
+      return 'Arutoria'
     }
   },
 
   head() {
     return {
-      title: this.post.title || '',
+      title: this.postTitle,
     }
   },
 
@@ -104,7 +121,7 @@ export default {
 .post-container {
   width: 100%;
   position: relative;
-  margin: 36px auto;
+  margin: 0px auto 36px auto;
   max-width: 720px !important;
   .post-bg-img-box {
     background-color: #ffffff;
@@ -131,8 +148,7 @@ export default {
 
 .pc {
   .post-container {
-    padding: 24px 0;
-    margin-top: 64px !important;
+    padding: 12px 0;
     .post-bg-img-box {
       border-radius: 4px 4px 0 0;
     }

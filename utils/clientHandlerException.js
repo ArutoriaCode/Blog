@@ -7,6 +7,8 @@ import {
   REGISTER_SUCCESS,
   INVALID_OR_EXPIRED_TOKEN,
   INVALID_TOKEN,
+  NOT_EXIST_USER_OR_PASSWORD_ERROR,
+  SERVER_ERROR
 } from '../config/codes'
 
 async function checkAndGetNewToken(_response, ctx) {
@@ -62,6 +64,9 @@ export default async (_response, ctx) => {
       return
     case EXIST_USER:
       ctx.$alert.error('用户已存在，请勿重复注册')
+      return
+    case NOT_EXIST_USER_OR_PASSWORD_ERROR:
+      ctx.$alert.error('用户不存在或密码输入错误')
       return
     case REGISTER_SUCCESS:
       ctx.$alert.success('注册成功，将为你自动登录')

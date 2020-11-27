@@ -104,12 +104,6 @@ export default {
           this.$cookies.set(USER_INFO, user)
           this.$emit('onCloseAccount')
         })
-        .catch((err) => {
-          this.loading = false
-          if (!err) {
-            this.$alert.error('凉凉，不知道出啥错了。')
-          }
-        })
     },
   },
 }
