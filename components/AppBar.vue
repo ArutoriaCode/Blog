@@ -18,74 +18,88 @@
       </template>
       <!-- Left End -->
       <!-- Right Start -->
-      <div class="toolbar-right-content align-center">
-        <template v-if="isPost">
-          <v-btn class="px-2 _post" depressed text small>
-            <v-icon class="animate__animated animate__heartBeat animate__slower animate__infinite"> mdi-heart </v-icon>
-            <span class="pl-1 font-unineue-bold">{{ likeNum }}</span>
-          </v-btn>
+      <no-ssr>
+        <div class="toolbar-right-content align-center">
+          <template v-if="isPost">
+            <v-btn class="px-2 _post" depressed text small>
+              <v-icon
+                class="animate__animated animate__heartBeat animate__slower animate__infinite"
+              >
+                mdi-heart
+              </v-icon>
+              <span class="pl-1 font-unineue-bold">{{ likeNum }}</span>
+            </v-btn>
+            <v-btn
+              class="px-2 _post"
+              depressed
+              text
+              small
+              @click.stop="onScrollToComment"
+            >
+              <v-icon> mdi-message-processing </v-icon>
+              <span class="pl-1 font-unineue-bold">{{ comment }}</span>
+            </v-btn>
+          </template>
           <v-btn
-            class="px-2 _post"
+            :class="_mobileHideClass"
             depressed
             text
             small
-            @click.stop="onScrollToComment"
+            @click.stop="switchTheme"
           >
-            <v-icon> mdi-message-processing </v-icon>
-            <span class="pl-1 font-unineue-bold">{{ comment }}</span>
+            <v-icon>
+              {{
+                $vuetify.theme.dark ? 'mdi-brightness-5' : 'mdi-brightness-2'
+              }}
+            </v-icon>
           </v-btn>
-        </template>
-        <v-btn
-          :class="_mobileHideClass"
-          depressed
-          text
-          small
-          @click.stop="switchTheme"
-        >
-          <v-icon>
-            {{ $vuetify.theme.dark ? 'mdi-brightness-5' : 'mdi-brightness-2' }}
-          </v-icon>
-        </v-btn>
-        <v-btn
-          :class="_mobileHideClass"
-          depressed
-          color="saber"
-          @click.stop="showAccount"
-          v-if="!authority"
-        >
-          登录
-        </v-btn>
-        <v-menu close-on-click offset-y v-else>
-          <template v-slot:activator="{ on, attrs }">
-            <v-avatar :class="_mobileHideClass" size="36" v-bind="attrs" v-on="on">
-              <v-img
-                :src="avatar || require('~/static/images/Delta.jpg')"
-                alt=""
-              />
-            </v-avatar>
-          </template>
+          <v-btn
+            :class="_mobileHideClass"
+            depressed
+            color="saber"
+            @click.stop="showAccount"
+            v-if="!authority"
+          >
+            登录
+          </v-btn>
+          <v-menu close-on-click offset-y>
+            <template v-slot:activator="{ on, attrs }">
+              <v-avatar
+                v-if="authority"
+                :class="_mobileHideClass"
+                size="36"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-img
+                  :src="avatar || require('~/static/images/Delta.jpg')"
+                  alt=""
+                />
+              </v-avatar>
+            </template>
 
-          <v-list class="_menu_list" dense>
-            <v-list-item link @click="onSetting">
-              <v-icon size="20">mdi-cog</v-icon>
-              设置
-            </v-list-item>
-            <v-list-item link @click="onLogout">
-              <v-icon size="20">mdi-exit-to-app</v-icon>
-              退出
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-btn
-          depressed
-          text
-          icon
-          class="d-lg-none d-xl-flex"
-          @click="showLeftNavigation = true"
-        >
-          <v-icon>mdi-menu</v-icon>
-        </v-btn>
-      </div>
+            <v-list class="_menu_list" dense>
+              <v-list-item link @click="onSetting">
+                <v-icon size="20">mdi-cog</v-icon>
+                设置
+              </v-list-item>
+              <v-list-item link @click="onLogout">
+                <v-icon size="20">mdi-exit-to-app</v-icon>
+                退出
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-btn
+            depressed
+            text
+            icon
+            class="d-lg-none d-xl-flex"
+            @click="showLeftNavigation = true"
+          >
+            <v-icon>mdi-menu</v-icon>
+          </v-btn>
+        </div>
+      </no-ssr>
       <!-- Right End -->
     </v-app-bar>
   </div>
@@ -106,7 +120,7 @@ export default {
     return {
       title: 'Arutoria',
       showLeftNavigation: false,
-      onLogout: logout.bind(this)
+      onLogout: logout.bind(this),
     }
   },
 
@@ -168,18 +182,18 @@ export default {
       })
     },
 
-    onSetting() {
-
-    },
+    onSetting() {},
   },
 }
 </script>
 <style lang="scss">
 .toolbar-right-content {
-  i.theme--light, ._post.theme--light .font-unineue-bold {
+  i.theme--light,
+  ._post.theme--light .font-unineue-bold {
     color: #757575 !important;
   }
-  i.theme--dark, ._post.theme--dark .font-unineue-bold {
+  i.theme--dark,
+  ._post.theme--dark .font-unineue-bold {
     color: #ffffff !important;
   }
 }

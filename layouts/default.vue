@@ -27,7 +27,7 @@ import Footer from '../components/Footer'
 import offline from '../static/images/offline.png'
 import { SUCCESS } from '~/config/codes'
 import { mapGetters } from 'vuex'
-import { ACCESS_TOKEN } from '~/config/keys'
+import { ACCESS_TOKEN, USER_INFO } from '~/config/keys'
 
 export default {
   components: {
@@ -44,10 +44,10 @@ export default {
   },
 
   beforeMount() {
+    const userInfo = this.$cookies.get(USER_INFO)
     const access_token = this.$cookies.get(ACCESS_TOKEN)
-    if (access_token) {
-      this.$api.setToken(access_token, 'Bearer')
-      this.updateLikes()
+    if (!this.authority && access_token && !isEmpty(userInfo)) {
+      this.$store.commit('setUserInfo', userInfo)
     }
   },
 
@@ -87,6 +87,8 @@ export default {
         return
       }
 
+      const access_token = this.$cookies.get(ACCESS_TOKEN)
+      this.$api.setToken(access_token, 'Bearer')
       // 获取当前登录用户全部点赞的信息
       this.$api.get('/like/all').then(rsp => {
         if (rsp.code === SUCCESS) {

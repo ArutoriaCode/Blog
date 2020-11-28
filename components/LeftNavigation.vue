@@ -57,24 +57,26 @@
       </div>
     </div>
     <div slot="append" class="container">
-      <v-btn
-        block
-        rounded
-        color="primary"
-        v-if="!authority"
-        @click.stop="_showAccount"
-        >登录</v-btn
-      >
-      <div class="authority" v-if="authority">
-        <v-btn text>
-          <v-icon>mdi-cog</v-icon>
-          设置
-        </v-btn>
-        <v-btn text>
-          <v-icon>mdi-exit-to-app</v-icon>
-          退出
-        </v-btn>
-      </div>
+      <no-ssr>
+        <v-btn
+          block
+          rounded
+          color="primary"
+          v-if="!authority"
+          @click="_showAccount"
+          >登录</v-btn
+        >
+        <div class="authority" v-else>
+          <v-btn text>
+            <v-icon>mdi-cog</v-icon>
+            设置
+          </v-btn>
+          <v-btn text>
+            <v-icon>mdi-exit-to-app</v-icon>
+            退出
+          </v-btn>
+        </div>
+      </no-ssr>
     </div>
   </v-navigation-drawer>
 </template>

@@ -67,7 +67,6 @@ export default {
     },
 
     _heartColor() {
-      console.log("🚀 ~ file: ArticlesCard.vue ~ line 70 ~ _heartColor ~ this.isLiked", this.isLiked)
       return this.isLiked ? 'red darken-1' : undefined
     },
 

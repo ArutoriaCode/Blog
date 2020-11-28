@@ -74,8 +74,7 @@ export default {
     try {
       const posts = await $api.get('/posts')
       return {
-        posts: posts.data,
-        test: false,
+        posts: posts.data
       }
     } catch (error) {
       console.error('Get Post Error:', error)
