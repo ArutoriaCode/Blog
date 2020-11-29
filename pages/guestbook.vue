@@ -3,10 +3,11 @@
     <div class="title" style="margin-bottom: 6px">留言</div>
     <v-textarea
       solo
-      name="input-7-4"
+      id="_message"
       v-model="message"
       flat
-      label="留下你的足迹..."
+      :autofocus="!!fromName"
+      :label="_TextareaLabel"
     />
     <div class="flex-middle-between mb-2">
       <v-subheader class="subinfo">欢迎留言</v-subheader>
@@ -29,7 +30,12 @@
             <div class="center float-left">
               <div class="subtitle-2 flex-middle">
                 <span>{{ comment.fromName }}</span>
-                <v-btn color="primary" x-small elevation="0" class="reply-btn"
+                <v-btn
+                  color="primary"
+                  x-small
+                  elevation="0"
+                  @click="onReply(comment.id, comment.fromId, comment.fromName)"
+                  class="reply-btn"
                   >回复</v-btn
                 >
               </div>
@@ -40,8 +46,16 @@
                 <span class="white--text headline">38</span>
               </v-avatar>
             </div>
-            <div class="right float-left" @click="onLike">
-              <v-btn text class="pa-0" width="24" height="24" min-width="24">
+            <div class="right float-left">
+              <v-btn
+                text
+                rounded
+                class="pa-0"
+                @click.stop="handlerLike(comment)"
+                width="24"
+                height="24"
+                min-width="24"
+              >
                 <v-icon
                   size="24"
                   :color="comment._heartColor"
@@ -52,7 +66,7 @@
               </v-btn>
               <div
                 class="font-pixer text-center"
-                style="line-height: 20px; font-size: 18px;"
+                style="line-height: 20px; font-size: 18px"
               >
                 {{ comment.likeNum }}
               </div>
@@ -85,13 +99,17 @@
 </template>
 <script>
 import dayjs from 'dayjs'
-import { mapGetters } from 'vuex'
-import { SUCCESS } from '~/config/codes'
+import { mapGetters, mapState } from 'vuex'
+import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
+import isSafeInteger from 'lodash/isSafeInteger'
 export default {
   data: () => ({
     comments: [],
     message: '',
+    commentId: null,
+    toId: null,
+    fromName: null
   }),
 
   inject: {
@@ -121,7 +139,32 @@ export default {
   },
 
   computed: {
+    ...mapState(['likes']),
     ...mapGetters(['authority']),
+
+    _TextareaLabel() {
+      return this.fromName ? `回复${this.fromName}：` : '留下你的足迹...'
+    }
+  },
+
+  watch: {
+    likes: {
+      handler(values) {
+        if (this.comments.length === 0 || values.length === 0) {
+          return
+        }
+
+        this.comments = this.comments.map((c) => {
+          c.isLiked = values.includes(c.type + '-' + c.id)
+          c._heartColor = c.isLiked ? 'red darken-1' : undefined
+          c._heartClass = c.isLiked
+            ? ''
+            : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+          return c
+        })
+      },
+      deep: true,
+    },
   },
 
   methods: {
@@ -132,34 +175,109 @@ export default {
 
       this.comments.map((c) => {
         c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
-        const joinKey = LIKE_TYPE.COMMENT + '-' + c.id
-        const isLiked = this.$store.state.likes.includes(joinKey)
-        c._heartColor = isLiked ? 'red darken-1' : undefined
-        c._heartClass = isLiked
-          ? ''
-          : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+      })
+    },
+
+    onReply(commentId, toId, fromName) {
+      this.commentId = commentId
+      this.toId = toId
+      this.fromName = fromName
+
+      this.$nextTick(() => {
+        const message = document.getElementById('_message')
+        message.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        })
+
+        message.focus()
       })
     },
 
     onLeaveMessage() {
-      this.$api
-        .post('/comment/create', {
-          content: this.message,
-          type: COMMENT_TYPE.COMMENT,
-        })
-        .then((rsp) => {
-          if (rsp.code === SUCCESS) {
-            this.$alert.success('发表成功！')
-          }
-        })
-    },
-
-    onLike() {
       if (!this.authority) {
         this.showAccount()
         return
       }
+
+      const data = {
+        content: this.message,
+        type: COMMENT_TYPE.COMMENT,
+      }
+
+      if (isSafeInteger(this.commentId) && isSafeInteger(this.toId)) {
+        data.commentId = this.commentId
+        data.toId = this.toId
+      }
+
+      this.$api.post('/comment/create', data).then((rsp) => {
+        this.toId = null
+        this.fromName = null
+        this.commentId = null
+        if (rsp.code === SUCCESS) {
+          this.$alert.success('发表成功！')
+        }
+      })
     },
+
+    handlerLike(comment) {
+      if (!this.authority) {
+        this.showAccount()
+        return
+      }
+
+      if (!comment.isLiked) {
+        this.onLike(comment)
+      } else {
+        this.onCancelLike(comment)
+      }
+    },
+
+    onLike(comment) {
+      this.$api
+        .post('/like', {
+          type: LIKE_TYPE.COMMENT,
+          id: comment.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('你已经点过赞了哟！')
+            return
+          }
+
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            comment.likeNum++
+            comment.isLiked = true
+            comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
+            comment._heartClass = comment.isLiked
+              ? ''
+              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+          }
+        })
+    },
+
+    onCancelLike(comment) {
+      this.$api.post('/like/cancel', {
+        type: LIKE_TYPE.COMMENT,
+        id: comment.id,
+      }).then(rsp => {
+        if (rsp.code === FAIL) {
+          this.$alert.info('取消点赞出现错误')
+          return
+        }
+
+        if (rsp.code === SUCCESS) {
+          this.$alert.success(rsp.msg)
+          comment.likeNum--
+          comment.isLiked = false
+          comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
+          comment._heartClass = comment.isLiked
+            ? ''
+            : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+        }
+      })
+    }
   },
 }
 </script>
