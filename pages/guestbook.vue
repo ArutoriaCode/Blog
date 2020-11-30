@@ -42,8 +42,23 @@
               <div class="caption">{{ comment.created_at }}</div>
             </div>
             <div class="left float-left">
-              <v-avatar color="primary" size="38">
-                <span class="white--text headline">38</span>
+              <v-avatar size="38">
+                <v-img :src="comment.avatar || require('~/static/images/Elaina.jpg')">
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        :width="2"
+                        size="28"
+                        color="saber"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
               </v-avatar>
             </div>
             <div class="right float-left">
@@ -136,6 +151,10 @@ export default {
     this._initComments()
   },
 
+  beforeMount() {
+    this.updateLikes()
+  },
+
   computed: {
     ...mapState(['likes']),
     ...mapGetters(['authority']),
@@ -148,18 +167,7 @@ export default {
   watch: {
     likes: {
       handler(values) {
-        if (this.comments.length === 0 || values.length === 0) {
-          return
-        }
-
-        this.comments = this.comments.map((c) => {
-          c.isLiked = values.includes(c.type + '-' + c.id)
-          c._heartColor = c.isLiked ? 'red darken-1' : undefined
-          c._heartClass = c.isLiked
-            ? ''
-            : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-          return c
-        })
+        this.updateLikes()
       },
       deep: true,
     },
@@ -173,6 +181,21 @@ export default {
 
       this.comments.map((c) => {
         c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
+      })
+    },
+
+    updateLikes() {
+      if (this.comments.length === 0 || this.likes.length === 0) {
+        return
+      }
+
+      this.comments = this.comments.map((c) => {
+        c.isLiked = this.likes.includes(c.type + '-' + c.id)
+        c._heartColor = c.isLiked ? 'red darken-1' : undefined
+        c._heartClass = c.isLiked
+          ? ''
+          : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+        return c
       })
     },
 
@@ -214,6 +237,11 @@ export default {
         this.commentId = null
         if (rsp.code === SUCCESS) {
           this.$alert.success('发表成功！')
+          return this.$api.get('/guestbook')
+        }
+      }).then(rsp => {
+        if (rsp.code === SUCCESS) {
+          this.comments = rsp.code === SUCCESS ? rsp.data || [] : []
         }
       })
     },
