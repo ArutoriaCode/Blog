@@ -9,7 +9,13 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@editorjs/delimiter": "^1.2.0",
     "@editorjs/editorjs": "^2.19.0",
+    "@editorjs/embed": "^2.4.0",
+    "@editorjs/header": "^2.6.1",
+    "@editorjs/link": "^2.3.1",
+    "@editorjs/marker": "^1.2.2",
+    "@editorjs/simple-image": "^1.4.0",
     "@nuxtjs/axios": "^5.12.2",
     "core-js": "^3.6.5",
     "dayjs": "^1.9.6",

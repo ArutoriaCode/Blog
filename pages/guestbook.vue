@@ -109,7 +109,7 @@ export default {
     message: '',
     commentId: null,
     toId: null,
-    fromName: null
+    fromName: null,
   }),
 
   inject: {
@@ -122,14 +122,12 @@ export default {
     try {
       const response = await $api.get('/guestbook')
       return {
-        comments: response.code === SUCCESS ? response.data : [],
-        message: '',
+        comments: response.code === SUCCESS ? response.data || [] : [],
       }
     } catch (error) {
       console.error('Get Comment Error:', error)
       return {
-        posts: [],
-        message: '',
+        comments: []
       }
     }
   },
@@ -144,7 +142,7 @@ export default {
 
     _TextareaLabel() {
       return this.fromName ? `回复${this.fromName}：` : '留下你的足迹...'
-    }
+    },
   },
 
   watch: {
@@ -169,7 +167,7 @@ export default {
 
   methods: {
     _initComments() {
-      if (this.comments.length === 0) {
+      if (this.comments && this.comments.length === 0) {
         return
       }
 
@@ -187,7 +185,7 @@ export default {
         const message = document.getElementById('_message')
         message.scrollIntoView({
           behavior: 'smooth',
-          block: 'center'
+          block: 'center',
         })
 
         message.focus()
@@ -258,26 +256,28 @@ export default {
     },
 
     onCancelLike(comment) {
-      this.$api.post('/like/cancel', {
-        type: LIKE_TYPE.COMMENT,
-        id: comment.id,
-      }).then(rsp => {
-        if (rsp.code === FAIL) {
-          this.$alert.info('取消点赞出现错误')
-          return
-        }
+      this.$api
+        .post('/like/cancel', {
+          type: LIKE_TYPE.COMMENT,
+          id: comment.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('取消点赞出现错误')
+            return
+          }
 
-        if (rsp.code === SUCCESS) {
-          this.$alert.success(rsp.msg)
-          comment.likeNum--
-          comment.isLiked = false
-          comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
-          comment._heartClass = comment.isLiked
-            ? ''
-            : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-        }
-      })
-    }
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            comment.likeNum--
+            comment.isLiked = false
+            comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
+            comment._heartClass = comment.isLiked
+              ? ''
+              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+          }
+        })
+    },
   },
 }
 </script>

@@ -12,7 +12,7 @@ export default [
     to: '/guestbook'
   },
   {
-    icon: "mdi-comment-processing-outline",
+    icon: "mdi-account-supervisor ",
     name: '友邻',
     value: 'links',
     to: '/links'

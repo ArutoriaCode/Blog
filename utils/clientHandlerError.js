@@ -1,7 +1,7 @@
 import { CREDENTIALS_REQUIRED_TOKEN, SERVER_ERROR, PARAMS_ERROR, INVALID_TOKEN, INVALID_OR_EXPIRED_TOKEN } from '@/config/codes'
 import checkAndGetNewToken from './checkAndGetNewToken';
 
-function prefixCheckAlert(msg, config) {
+function prefixCheckAlert(ctx, msg, config) {
   const { url, method } = config
 
   // 如果登录过期或没有登录，一些接口的错误信息是不需要提示的
@@ -10,12 +10,11 @@ function prefixCheckAlert(msg, config) {
     return
   }
 
-  this.$alert.error(msg)
+  ctx.$alert.error(msg)
 }
 
 /** 一些异常类的status状态码并非是200，所以需要在此处处理axios的ReponseError */
 export default async (reponse, ctx) => {
-  console.log("🚀 ~ file: clientHandlerError.js ~ line 6 ~ reponse", reponse)
   if (!process.client || !reponse.data.code) {
     return
   }
@@ -27,7 +26,7 @@ export default async (reponse, ctx) => {
       return
     // status: 401
     case CREDENTIALS_REQUIRED_TOKEN:
-      prefixCheckAlert('请先登录！', reponse.config)
+      prefixCheckAlert(ctx, '请先登录！', reponse.config)
       return
     // status: 422
     case PARAMS_ERROR:

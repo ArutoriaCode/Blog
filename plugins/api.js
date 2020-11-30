@@ -28,8 +28,8 @@ function reponseDataToJson(response) {
 export default (ctx, inject) => {
   const api = ctx.$axios.create()
   api.setBaseURL(
-    // dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
-    dev ? 'http://192.168.124.3:6140/api/v1/' : 'http://arutoria.com/api/v1/'
+    dev ? 'http://192.168.1.125:6140/api/v1/' : 'http://arutoria.com/api/v1/'
+    // dev ? 'http://192.168.124.3:6140/api/v1/' : 'http://arutoria.com/api/v1/'
   )
 
   api.setHeader('Content-Type', 'application/json', ['post'])
@@ -52,7 +52,6 @@ export default (ctx, inject) => {
 
   api.onResponse(async (response) => {
     const data = reponseDataToJson(response)
-    console.log("🚀 ~ file: api.js ~ line 55 ~ api.onResponse ~ data", data)
     if (dev) {
       console.log('clinet response ->', data)
     }

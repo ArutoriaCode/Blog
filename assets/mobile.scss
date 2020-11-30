@@ -17,12 +17,12 @@
     }
   }
 
-  .index-container, .pageGuestbook, .pageLinks {
+  .index-container, .pageGuestbook, .pageLinks, .pageEditor {
     margin: 0 auto;
     max-width: 760px !important;
   }
 
-  .index-container {
+  .index-container, .pageEditor {
     padding: 0px 24px 40px;
   }
 
