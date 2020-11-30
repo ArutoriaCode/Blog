@@ -155,6 +155,10 @@ export default {
     this.updateLikes()
   },
 
+  activated() {
+    this.updateLikes()
+  },
+
   computed: {
     ...mapState(['likes']),
     ...mapGetters(['authority']),
@@ -166,10 +170,10 @@ export default {
 
   watch: {
     likes: {
-      handler(values) {
+      handler() {
         this.updateLikes()
       },
-      deep: true,
+      deep: true
     },
   },
 
