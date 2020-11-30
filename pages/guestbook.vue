@@ -43,7 +43,7 @@
             </div>
             <div class="left float-left">
               <v-avatar size="38">
-                <v-img :src="comment.avatar || require('~/static/images/Elaina.jpg')">
+                <v-img :src="comment.avatar">
                   <template v-slot:placeholder>
                     <v-row
                       class="fill-height ma-0"
@@ -118,6 +118,7 @@ import { mapGetters, mapState } from 'vuex'
 import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
 import isSafeInteger from 'lodash/isSafeInteger'
+import cloneDeep from 'lodash/cloneDeep'
 export default {
   data: () => ({
     comments: [],
@@ -152,10 +153,12 @@ export default {
   },
 
   beforeMount() {
+    console.log('likes ------------------------>', this.likes)
     this.updateLikes()
   },
 
   activated() {
+    console.log('likes ------------------------>', this.likes)
     this.updateLikes()
   },
 
@@ -193,7 +196,8 @@ export default {
         return
       }
 
-      this.comments = this.comments.map((c) => {
+      const comments = cloneDeep(this.comments)
+      this.comments = comments.map((c) => {
         c.isLiked = this.likes.includes(c.type + '-' + c.id)
         c._heartColor = c.isLiked ? 'red darken-1' : undefined
         c._heartClass = c.isLiked
