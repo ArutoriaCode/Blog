@@ -78,10 +78,14 @@ export default (ctx, inject) => {
     const response = { data, config: err.config }
     const isRefreshToken = url === '/refresh' && method === 'post'
     if (process.client && !isRefreshToken) {
-      await clientHandlerError(response, ctx)
-      return response.data
+      const result = await clientHandlerError(response, ctx)
+      if (!!result) {
+        return result
+      } else {
+        return response.data
+      }
     }
-    
+
     const isGetAllLike = url === '/like/all' && method === 'get'
     if (isGetAllLike) {
       return response.data
