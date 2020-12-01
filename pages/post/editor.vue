@@ -3,25 +3,27 @@
     <div class="pageEditor">
       <v-subheader class="pa-0 title">编辑文章</v-subheader>
       <v-subheader class="pa-0">文章头图</v-subheader>
-      <v-card flat height="240px" class="banner">
-        <div
-          class="d-flex flex-row justify-center align-center"
-          style="height: 240px"
-        >
-          <v-file-input
-            filled
-            hide-input
-          >
-            <div slot="prepend-inner">
-              <v-icon size="48">mdi-camera</v-icon>
-            </div>
-          </v-file-input>
-          <span class="headline">点击上传文章头图</span>
-        </div>
+      <v-card flat :height="_HeadCardHeight">
+        <v-file-input
+          class="file-upload d-flex flex-row justify-center align-center"
+          :style="`height: ${_HeadCardHeight}px`"
+          hide-input
+          hide-details
+          :accept="accpet"
+          prepend-icon="mdi-camera"
+          @change="onChange"
+        ></v-file-input>
       </v-card>
       <div class="editor_title mt-4">
         <v-subheader class="pl-0">文章标题</v-subheader>
-        <v-text-field hide-details dense label="请输入标题" v-model="title" solo flat />
+        <v-text-field
+          hide-details
+          dense
+          label="请输入标题"
+          v-model="title"
+          solo
+          flat
+        />
       </div>
       <div class="d-flex flex-row justify-space-between align-center">
         <v-subheader class="pa-0">文章内容</v-subheader>
@@ -50,8 +52,23 @@ export default {
     return {
       title: '',
       postData: {},
+      headImg: '',
       isPreview: false,
+      accpet: '.png,.jpg'
     }
+  },
+
+  computed: {
+    _HeadCardHeight() {
+      if (this.$vuetify.breakpoint.xs) {
+        return 150
+      }
+      if (this.$vuetify.breakpoint.sm) {
+        return 250
+      } else {
+        return 350
+      }
+    },
   },
 
   methods: {
@@ -62,12 +79,18 @@ export default {
     },
 
     sendPost() {
-      // this.$api.post('/post/create', {
-      //   content: postData,
-      // }).then(rsp => {
-
-      // })
+      // this.$api
+      //   .post('/post/create', {
+      //     title: this.title,
+      //     content: this.postData,
+      //     img: this.headImg,
+      //   })
+      //   .then((rsp) => {})
     },
+
+    onChange(File) {
+
+    }
   },
 }
 </script>
@@ -81,9 +104,30 @@ export default {
   .codex-editor--narrow .link-tool__image {
     display: block;
   }
-  .banner {
-    .v-input {
-      flex: none !important;
+  .file-upload {
+    border: none;
+    margin: 0;
+    padding: 0;
+    .v-icon:focus, .v-icon::after {
+      opacity: 0;
+    }
+    .v-input__icon {
+      height: 100%;
+      width: 100%;
+      .mdi.mdi-camera {
+        height: 100%;
+        width: 100%;
+        opacity: 1 !important;
+        &::before {
+          font-size: 36px;
+          font-size: 2.25rem;
+        }
+      }
+    }
+    .v-input__prepend-outer {
+      height: 100%;
+      width: 100%;
+      margin: 0;
     }
   }
 }
