@@ -2,7 +2,9 @@
   <div class="pageGuestbook">
     <div class="flex-middle-between">
       <div class="title" style="margin-bottom: 6px">留言</div>
-      <v-btn text color="orange lighten-2" v-if="toId" @click="onCancelReply">取消回复</v-btn>
+      <v-btn text color="orange lighten-2" v-if="toId" @click="onCancelReply"
+        >取消回复</v-btn
+      >
     </div>
     <v-textarea
       solo
@@ -182,8 +184,11 @@ export default {
         .then((rsp) => {
           this.spreadLoading = false
           if (rsp.code === SUCCESS) {
+            const reply = rsp.data.map((c) => {
+              c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
+            })
             this.replys[commentId] = {
-              data: rsp.data,
+              data: reply,
               status: true,
             }
             this.scrollByReply(commentId)
