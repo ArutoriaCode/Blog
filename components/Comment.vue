@@ -264,12 +264,12 @@ export default {
 
     updateLikes() {
       if (this.likes.length === 0) {
-        return
+        this.comment.isLiked = false
+      } else {
+        const joinKey = LIKE_TYPE.COMMENT + '-' + this.comment.id
+        this.comment.isLiked = this.likes.includes(joinKey)
       }
 
-      this.comment.isLiked = this.likes.includes(
-        LIKE_TYPE.COMMENT + '-' + this.comment.id
-      )
       this.comment.heartColor = this.comment.isLiked
         ? 'red darken-1'
         : undefined

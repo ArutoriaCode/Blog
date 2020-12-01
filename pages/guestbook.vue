@@ -244,10 +244,6 @@ export default {
     },
 
     updateLikes() {
-      if (this.likes.length === 0) {
-        return
-      }
-
       this.comments.map((c) => this.setLikeStatusAndClass(c))
       this.comments = [...this.comments]
       if (!isEmpty(this.replys)) {
@@ -257,7 +253,13 @@ export default {
     },
 
     setLikeStatusAndClass(c) {
-      c.isLiked = this.likes.includes(LIKE_TYPE.COMMENT + '-' + c.id)
+      if (this.likes.length === 0) {
+        c.isLiked = false
+      } else {
+        const joinKey = LIKE_TYPE.COMMENT + '-' + c.id
+        c.isLiked = this.likes.includes(joinKey)
+      }
+
       c.heartColor = c.isLiked ? 'red darken-1' : undefined
       c.heartClass = c.isLiked
         ? ''
