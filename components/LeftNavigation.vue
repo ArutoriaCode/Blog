@@ -71,7 +71,7 @@
             <v-icon>mdi-cog</v-icon>
             设置
           </v-btn>
-          <v-btn text>
+          <v-btn text @click="onLogout">
             <v-icon>mdi-exit-to-app</v-icon>
             退出
           </v-btn>
@@ -82,6 +82,7 @@
 </template>
 <script>
 import routes from '../config/routes'
+import logout from '~/utils/logout'
 import { mapGetters, mapState } from 'vuex'
 export default {
   props: {
@@ -92,6 +93,7 @@ export default {
     return {
       drawer: this.value,
       routes,
+      onLogout: logout.bind(this)
     }
   },
 

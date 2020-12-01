@@ -17,6 +17,7 @@ function refreshTokenFail(ctx) {
   }, 3000)
 }
 
+/** 刷新access_token令牌，成功后重新发起上次失败的请求并返回响应结果 */
 export default async (_response, ctx) => {
   // 先判断刷新令牌是否存在
   const refresh_token = ctx.$cookies.get(REFRESH_ACCESS_TOKEN)

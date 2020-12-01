@@ -1,8 +1,7 @@
 <template>
   <v-card
-    min-height="240px"
+    :min-height="minHeight"
     rounded="lg"
-    :height="height"
     class="editor-card"
     flat
   >
@@ -31,7 +30,11 @@ if (process.client) {
 const dev = process.env.NODE_ENV !== 'production'
 export default {
   props: {
-    value: Object
+    value: Object,
+    minHeight: {
+      type: [String, Number],
+      default: 480
+    }
   },
 
   data() {

@@ -10,9 +10,14 @@
       }
     }
   }
-  .index-container, .pageGuestbook, .pageLinks, .pageEditor {
+  .index-container, .pageGuestbook, .pageLinks {
     margin: 0 auto;
     max-width: 1080px !important;
+  }
+
+  .pageEditor {
+    margin: 0 auto;
+    max-width: 760px !important;
   }
 
   .toolbar-title {
