@@ -1,15 +1,19 @@
 <template>
   <div class="pageGuestbook">
-    <div class="title" style="margin-bottom: 6px">留言</div>
+    <div class="flex-middle-between">
+      <div class="title" style="margin-bottom: 6px">留言</div>
+      <v-btn text color="orange lighten-2" v-if="toId" @click="onCancelReply">取消回复</v-btn>
+    </div>
     <v-textarea
       solo
       id="_message"
       v-model="message"
       flat
-      :autofocus="!!fromName"
+      :autofocus="!!toName"
       :label="_TextareaLabel"
+      hide-details
     />
-    <div class="flex-middle-between mb-2">
+    <div class="flex-middle-between mt-2 mb-2">
       <v-subheader class="subinfo">欢迎留言</v-subheader>
       <v-btn color="primary" small v-if="!authority" @click="showAccount"
         >请先登录</v-btn
@@ -20,93 +24,39 @@
         v-else
         :disabled="message.length === 0"
         @click="onLeaveMessage"
-        >留言</v-btn
+        >{{ toName ? '回复' : '留言' }}</v-btn
       >
     </div>
     <v-card flat v-if="comments.length > 0">
-      <div class="guestbook-item" v-for="comment in comments" :key="comment.id">
-        <div style="padding: 10px 0 10px 10px" v-ripple>
-          <div class="container-three">
-            <div class="center float-left">
-              <div class="subtitle-2 flex-middle">
-                <span>{{ comment.fromName }}</span>
-                <v-btn
-                  color="primary"
-                  x-small
-                  elevation="0"
-                  @click="onReply(comment.id, comment.fromId, comment.fromName)"
-                  class="reply-btn"
-                  >回复</v-btn
-                >
-              </div>
-              <div class="caption">{{ comment.created_at }}</div>
-            </div>
-            <div class="left float-left">
-              <v-avatar size="38">
-                <v-img :src="comment.avatar">
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular
-                        indeterminate
-                        :width="2"
-                        size="28"
-                        color="saber"
-                      ></v-progress-circular>
-                    </v-row>
-                  </template>
-                </v-img>
-              </v-avatar>
-            </div>
-            <div class="right float-left">
-              <v-btn
-                text
-                rounded
-                class="pa-0"
-                @click.stop="handlerLike(comment)"
-                width="24"
-                height="24"
-                min-width="24"
-              >
-                <v-icon
-                  size="24"
-                  :color="comment._heartColor"
-                  :class="comment._heartClass"
-                >
-                  mdi-heart
-                </v-icon>
-              </v-btn>
-              <div
-                class="font-pixer text-center"
-                style="line-height: 20px; font-size: 18px"
-              >
-                {{ comment.likeNum }}
-              </div>
-            </div>
-          </div>
-          <div class="pr-3">
-            <div class="body-2">
-              <p>{{ comment.content }}</p>
-            </div>
-          </div>
+      <Comment
+        v-for="comment in comments"
+        @reply="onReply"
+        @spread="onSpread"
+        :spreadLoading="spreadLoading"
+        :key="comment.id"
+        :data="comment"
+      >
+        <div
+          class="sub-comment-list"
+          :id="`cid-${comment.id}`"
+          v-if="replys[comment.id] && replys[comment.id].status"
+        >
+          <Comment
+            v-for="reply in replys[comment.id].data"
+            @reply="onReply"
+            :data="reply"
+            :key="reply.id"
+            :isComment="false"
+          />
         </div>
-        <div v-if="comment.commentReplayNum > 0">
-          <div class="expand-reply">
-            <v-btn x-small text>展开{{ comment.commentReplayNum }}条回复</v-btn>
-          </div>
-        </div>
-        <v-divider></v-divider>
-      </div>
+      </Comment>
     </v-card>
     <v-alert prominent class="empty-alert pa-16" v-else>
       <div slot="prepend">
         <v-img
           :src="require('~/static/images/comment_empty.png')"
           width="248"
-        ></v-img>
+        />
       </div>
       <v-subheader class="font-unineue text-no-wrap">NOT COMMENT</v-subheader>
     </v-alert>
@@ -119,19 +69,28 @@ import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
 import isSafeInteger from 'lodash/isSafeInteger'
 import cloneDeep from 'lodash/cloneDeep'
+import Comment from '@/components/Comment'
+import isEmpty from 'lodash/isEmpty'
 export default {
-  data: () => ({
-    comments: [],
-    message: '',
-    commentId: null,
-    toId: null,
-    fromName: null,
-  }),
-
   inject: {
     showAccount: {
       type: Function,
     },
+  },
+
+  data: () => ({
+    comments: [],
+    replys: {},
+    message: '',
+    commentId: null,
+    toId: null,
+    toName: null,
+
+    spreadLoading: false,
+  }),
+
+  components: {
+    Comment,
   },
 
   async asyncData({ $api }) {
@@ -143,7 +102,7 @@ export default {
     } catch (error) {
       console.error('Get Comment Error:', error)
       return {
-        comments: []
+        comments: [],
       }
     }
   },
@@ -153,30 +112,23 @@ export default {
   },
 
   beforeMount() {
-    console.log('likes ------------------------>', this.likes)
-    this.updateLikes()
-  },
-
-  activated() {
-    console.log('likes ------------------------>', this.likes)
     this.updateLikes()
   },
 
   computed: {
     ...mapState(['likes']),
     ...mapGetters(['authority']),
-
     _TextareaLabel() {
-      return this.fromName ? `回复${this.fromName}：` : '留下你的足迹...'
+      return this.toName ? `回复${this.toName}：` : '留下你的足迹...'
     },
   },
 
   watch: {
     likes: {
-      handler() {
+      handler(value) {
         this.updateLikes()
       },
-      deep: true
+      deep: true,
     },
   },
 
@@ -191,35 +143,66 @@ export default {
       })
     },
 
-    updateLikes() {
-      if (this.comments.length === 0 || this.likes.length === 0) {
+    onCancelReply() {
+      this.commentId = null
+      this.toId = null
+      this.toName = null
+    },
+
+    onReply({ commentId, toId, toName }) {
+      this.commentId = commentId
+      this.toId = toId
+      this.toName = toName
+      const input = document.getElementById('_message')
+      input.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+
+      input.focus()
+    },
+
+    /** 展开该条评论下所有的回复 */
+    onSpread({ commentId, status }) {
+      this.spreadLoading = true
+      const reply = this.replys[commentId]
+      if (reply && reply.data) {
+        reply.status = status
+        this.replys[commentId] = { ...reply }
+        this.spreadLoading = false
+        // 如果是展开，那么开始滚动
+        if (status) {
+          this.scrollByReply(commentId)
+        }
         return
       }
 
-      const comments = cloneDeep(this.comments)
-      this.comments = comments.map((c) => {
-        c.isLiked = this.likes.includes(c.type + '-' + c.id)
-        c._heartColor = c.isLiked ? 'red darken-1' : undefined
-        c._heartClass = c.isLiked
-          ? ''
-          : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-        return c
-      })
+      this.$api
+        .get(`/comment/reply?commentId=${commentId}`)
+        .then((rsp) => {
+          this.spreadLoading = false
+          if (rsp.code === SUCCESS) {
+            this.replys[commentId] = {
+              data: rsp.data,
+              status: true,
+            }
+            this.scrollByReply(commentId)
+          }
+        })
+        .catch((err) => {
+          this.spreadLoading = false
+        })
     },
 
-    onReply(commentId, toId, fromName) {
-      this.commentId = commentId
-      this.toId = toId
-      this.fromName = fromName
-
+    scrollByReply(commentId) {
       this.$nextTick(() => {
-        const message = document.getElementById('_message')
-        message.scrollIntoView({
+        const scroll = document.querySelector(
+          `.sub-comment-list#cid-${commentId}`
+        )
+        scroll.scrollIntoView({
           behavior: 'smooth',
           block: 'center',
         })
-
-        message.focus()
       })
     },
 
@@ -239,80 +222,46 @@ export default {
         data.toId = this.toId
       }
 
-      this.$api.post('/comment/create', data).then((rsp) => {
-        this.toId = null
-        this.fromName = null
-        this.commentId = null
-        if (rsp.code === SUCCESS) {
-          this.$alert.success('发表成功！')
-          return this.$api.get('/guestbook')
-        }
-      }).then(rsp => {
-        if (rsp.code === SUCCESS) {
+      this.$api
+        .post('/comment/create', data)
+        .then((rsp) => {
+          this.toId = null
+          this.toName = null
+          this.commentId = null
+          this.message = ''
+          if (rsp.code === SUCCESS) {
+            this.$alert.success('发表成功！')
+            return this.$api.get('/guestbook')
+          }
+        })
+        .then((rsp) => {
+          if (rsp.code !== SUCCESS) {
+            return
+          }
           this.comments = rsp.code === SUCCESS ? rsp.data || [] : []
-        }
-      })
+          this.updateLikes()
+        })
     },
 
-    handlerLike(comment) {
-      if (!this.authority) {
-        this.showAccount()
+    updateLikes() {
+      if (this.likes.length === 0) {
         return
       }
 
-      if (!comment.isLiked) {
-        this.onLike(comment)
-      } else {
-        this.onCancelLike(comment)
+      this.comments.map((c) => this.setLikeStatusAndClass(c))
+      this.comments = [...this.comments]
+      if (!isEmpty(this.replys)) {
+        Object.values(this.replys).map((c) => this.setLikeStatusAndClass(c))
+        this.replys = { ...this.replys }
       }
     },
 
-    onLike(comment) {
-      this.$api
-        .post('/like', {
-          type: LIKE_TYPE.COMMENT,
-          id: comment.id,
-        })
-        .then((rsp) => {
-          if (rsp.code === FAIL) {
-            this.$alert.info('你已经点过赞了哟！')
-            return
-          }
-
-          if (rsp.code === SUCCESS) {
-            this.$alert.success(rsp.msg)
-            comment.likeNum++
-            comment.isLiked = true
-            comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
-            comment._heartClass = comment.isLiked
-              ? ''
-              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-          }
-        })
-    },
-
-    onCancelLike(comment) {
-      this.$api
-        .post('/like/cancel', {
-          type: LIKE_TYPE.COMMENT,
-          id: comment.id,
-        })
-        .then((rsp) => {
-          if (rsp.code === FAIL) {
-            this.$alert.info('取消点赞出现错误')
-            return
-          }
-
-          if (rsp.code === SUCCESS) {
-            this.$alert.success(rsp.msg)
-            comment.likeNum--
-            comment.isLiked = false
-            comment._heartColor = comment.isLiked ? 'red darken-1' : undefined
-            comment._heartClass = comment.isLiked
-              ? ''
-              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-          }
-        })
+    setLikeStatusAndClass(c) {
+      c.isLiked = this.likes.includes(LIKE_TYPE.COMMENT + '-' + c.id)
+      c.heartColor = c.isLiked ? 'red darken-1' : undefined
+      c.heartClass = c.isLiked
+        ? ''
+        : 'animate__animated animate__heartBeat animate__slower animate__infinite'
     },
   },
 }
@@ -338,56 +287,9 @@ export default {
       margin-top: 24px;
     }
   }
-  .guestbook-item > * {
-    box-sizing: border-box;
-  }
-  .container-three {
-    overflow: hidden;
-    padding-left: 40px;
-    padding-right: 45px;
-    .reply-btn {
-      height: auto !important;
-      padding: 0 4px !important;
-      min-width: 45px !important;
-      margin-left: 10px;
-    }
-    .center {
-      width: 100%;
-      padding: 0 4px;
-    }
-    .left {
-      width: 40px;
-      margin-left: -100%;
-      position: relative;
-      right: 40px;
-      top: 2px;
-      .v-avatar {
-        margin-right: 12px !important;
-        margin-bottom: 12px;
-      }
-    }
-    .right {
-      width: 45px;
-      margin-right: -45px;
-      text-align: center;
-    }
-  }
-  .expand-reply {
-    position: relative;
-    padding-left: 62px;
-    color: #999;
-    font-size: 14px;
+  .sub-comment-list {
+    padding-left: 28px;
     margin-top: 5px;
-    margin-bottom: 10px;
-    &:before {
-      position: absolute;
-      content: '';
-      top: 49.5%;
-      left: 40px;
-      width: 18px;
-      height: 1px;
-      background: #777;
-    }
   }
 }
 </style>
