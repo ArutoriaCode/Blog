@@ -186,6 +186,7 @@ export default {
           if (rsp.code === SUCCESS) {
             const reply = rsp.data.map((c) => {
               c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
+              return c
             })
             this.replys[commentId] = {
               data: reply,
