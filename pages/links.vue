@@ -7,34 +7,16 @@
         <v-list-item-content>
           <div class="overline mb-1 red--text">关于博客</div>
           <v-list-item-subtitle class="font-weight-medium">
-            博客样式参考<a href="https://www.yevpt.com">YEVPT</a>，不定时更新。
+            博客整体布局和样式都参考了<a href="https://www.yevpt.com" class="blue--text text--lighten-2"> YEVPT </a>，源站点更加漂亮！
           </v-list-item-subtitle>
           <v-list-item-subtitle>
-            目前仅仅是静态页面，暂无动态数据，后端接口待开发中
+            项目前端仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog" class="blue--text text--lighten-2">Github</a>
           </v-list-item-subtitle>
           <v-list-item-subtitle>
-            项目仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog" class="blue--text text--lighten-2">Github</a>
+            项目后端仓库地址：<a href="https://github.com/Chenwangdexiwang/Blog-egg" class="blue--text text--lighten-2">Github</a>
           </v-list-item-subtitle>
           <div class="overline mb-1 red--text">申请规则</div>
-          <v-list-item-subtitle class="mb-3 font-weight-medium"
-            >如果要和本站交换友链，请按照以下格式发送到
-            <a href="mailto:vpt940417@gmail.com" class="text-decoration-none"
-              >vpt940417@gmail.com</a
-            ></v-list-item-subtitle
-          >
-          <v-list-item-subtitle class="font-weight-medium">
-            博客名字: YEVPT
-          </v-list-item-subtitle>
-          <v-list-item-subtitle class="font-weight-medium">
-            博客地址: https://www.yevpt.com
-          </v-list-item-subtitle>
-          <v-list-item-subtitle class="font-weight-medium">
-            博客简介: 我喜欢要么极度悲伤要么淡淡温暖。
-          </v-list-item-subtitle>
-          <v-list-item-subtitle class="font-weight-medium">
-            博客头像:
-            https://tc.yevpt.com/images/2020/06/15/vpt-avatar-img-7.md.png
-          </v-list-item-subtitle>
+          开发阶段数据库会不定时清除，所以友邻页面等我开发完之后再使用，以下都为假数据。
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
