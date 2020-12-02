@@ -50,6 +50,12 @@
         />
       </div>
     </div>
+    <div class="flex xs12 sm12">
+      <div class="form-field input-required avatar-upload">
+        <label>头像</label>
+        <v-file-input accept=".png,.jpg" v-model="avatar" :rules="avatarRules" filled rounded dense />
+      </div>
+    </div>
     <div class="flex xs12 sm12 text-center">
       <v-btn
         large
@@ -71,9 +77,9 @@
   </v-form>
 </template>
 <script>
-import { emailRules, passwordRules, usernameRules } from './rules'
-import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/config/codes.js'
 import intercept from '@/mixins/intercept'
+import { emailRules, passwordRules, usernameRules, avatarRules } from './rules'
+import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/config/codes.js'
 import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '~/config/keys'
 export default {
   mixins: [intercept],
@@ -82,11 +88,13 @@ export default {
     emailRules,
     passwordRules,
     usernameRules,
+    avatarRules,
     loading: false,
 
     email: '',
     password: '',
     username: '',
+    avatar: null,
 
     /** 已在intercept定义 */
     // count: 0,
@@ -108,11 +116,16 @@ export default {
       }
 
       this.loading = true
+      const formData = new FormData()
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+      formData.append('username', this.username)
+      formData.append('file', this.avatar)
       this.$api
-        .post('/user/register', {
-          email: this.email,
-          password: this.password,
-          username: this.username,
+        .post('/user/register', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         })
         .then((rsp) => {
           this.loading = false
@@ -175,6 +188,17 @@ export default {
     }
     .v-input__slot {
       padding: 0;
+    }
+    .v-input__append-inner {
+      padding-right: 10px;
+    }
+    .v-file-input__text {
+      padding-left: 14px;
+    }
+    .avatar-upload {
+      .v-input__slot {
+        cursor: pointer;
+      }
     }
   }
   .form-field .v-text-field input:hover {

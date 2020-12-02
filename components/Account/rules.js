@@ -15,3 +15,7 @@ export const usernameRules = [
   v => !!v || '必填项',
   v => (v && v.length >= 2 && v.length <= 16) || '昵称长度不能小于2字符且不能大于16字符'
 ]
+
+export const avatarRules = [
+  value => !value || value.size < 3000000 || '头像大小不能大于3MB',
+]

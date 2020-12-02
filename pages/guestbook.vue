@@ -205,10 +205,13 @@ export default {
         const scroll = document.querySelector(
           `.sub-comment-list#cid-${commentId}`
         )
-        scroll.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        })
+
+        if (scroll) {
+          scroll.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+        }
       })
     },
 
