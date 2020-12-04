@@ -6,12 +6,28 @@
         :src="postImg"
         max-width="100%"
         max-height="400px"
-      />
-
-      <v-card-title> {{ post.title }} </v-card-title>
-
-      <v-card-subtitle> {{ post.shortContent }} </v-card-subtitle>
-
+      >
+        <template v-slot:placeholder>
+          <v-row class="fill-height ma-0" align="center" justify="center">
+            <v-progress-circular
+              indeterminate
+              color="saber"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+      <v-lazy
+        v-model="isActive"
+        :options="{
+          threshold: 0.5,
+        }"
+      >
+        <div class="animate__animated animate__fadeInUp">
+          <v-card-title> {{ post.title }} </v-card-title>
+          <v-card-subtitle> {{ updatedAt }} </v-card-subtitle>
+          <v-card-text v-if="post.shortContent">{{ post.shortContent }}</v-card-text>
+        </div>
+      </v-lazy>
       <v-card-actions class="_post_actions">
         <v-btn color="error" text :to="`/post/${post.id}`"> 开始阅读 </v-btn>
         <v-spacer></v-spacer>
@@ -21,11 +37,7 @@
             <span class="pl-1 font-pixer">{{ post.readCount }}</span>
           </v-btn>
           <v-btn text x-small @click="handlerLike">
-            <v-icon
-              size="20"
-              :color="_heartColor"
-              :class="_heartClass"
-            >
+            <v-icon size="20" :color="_heartColor" :class="_heartClass">
               mdi-heart
             </v-icon>
             <span class="pl-1 font-pixer">{{ post.likeNum }}</span>
@@ -40,6 +52,7 @@
   </div>
 </template>
 <script>
+import dayjs from 'dayjs'
 import { mapGetters, mapState } from 'vuex'
 import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { LIKE_TYPE } from '~/config/keys'
@@ -51,10 +64,16 @@ export default {
     },
   },
 
+  data() {
+    return {
+      isActive: false
+    }
+  },
+
   inject: {
     showAccount: {
-      type: Function
-    }
+      type: Function,
+    },
   },
 
   computed: {
@@ -75,7 +94,13 @@ export default {
     },
 
     _heartClass() {
-      return this.isLiked ? '' : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+      return this.isLiked
+        ? ''
+        : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+    },
+
+    updatedAt() {
+      return dayjs(this.post.updated_at).format('M月 DD，YYYY')
     }
   },
 
@@ -137,8 +162,8 @@ export default {
             this.$store.commit('setLikes', likes)
           }
         })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">

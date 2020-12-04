@@ -145,10 +145,14 @@ export default {
     },
 
     currentPost() {
-      return this.$store.state.posts[this.$route.params.id]
+      return this.$store.state.posts[this.$route.params.id] || null
     },
 
     isLiked() {
+      if (!this.currentPost) {
+        return false
+      }
+
       return this.likes.includes(LIKE_TYPE.POST + '-' + this.currentPost.id)
     },
 

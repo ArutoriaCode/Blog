@@ -1,6 +1,6 @@
 <template>
   <div class="post-container">
-    <div class="post-bg-img-box">
+    <div class="post-bg-img-box animate__animated animate__zoomIn" v-show="postImg">
       <v-img
         :src="postImg"
         width="100%"
@@ -9,16 +9,16 @@
     </div>
     <div class="article-container">
       <div class="article-content">
-        <div class="display-1">{{ post.title }}</div>
-        <div class="flex-middle-between mt-8 mb-15">
+        <div class="display-1">{{ postTitle }}</div>
+        <div class="flex-middle-between mt-8 mb-15" v-if="postUser">
           <div>
             <div class="d-flex justify-start align-center">
               <v-avatar size="48">
-                <v-img :src="post.user.avatar || require('~/static/images/Delta.jpg')"></v-img>
+                <v-img :src="postUser.avatar || require('~/static/images/Delta.jpg')"></v-img>
               </v-avatar>
               <div class="ml-4">
                 <div class="font-weight-regular font-unineue font-weight-bold">
-                  {{ post.user.username }}
+                  {{ postUser.username }}
                 </div>
                 <div class="caption mt-1">{{ post.updated_at }}</div>
               </div>
@@ -63,6 +63,12 @@ export default {
     Editor
   },
 
+  data() {
+    return {
+      post: {}
+    }
+  },
+
   async asyncData({ $api, params, store }) {
     console.log("🚀 Get Cache")
     const posts = store.state.posts
@@ -83,7 +89,7 @@ export default {
 
     store.commit('setPostCache', post.data)
     return {
-      post: posts[params.id]
+      post: post.data
     }
   },
 
@@ -109,6 +115,14 @@ export default {
       }
 
       return 'Arutoria'
+    },
+
+    postUser() {
+      if (this.post && this.post.user) {
+        return this.post.user
+      }
+
+      return null
     }
   },
 
