@@ -5,7 +5,7 @@
     class="editor-card"
     flat
   >
-    <div id="editor" :class="_ReadOnly" :style="_EditorPadding"></div>
+    <div :id="id" :class="_ReadOnly" :style="_EditorPadding"></div>
   </v-card>
 </template>
 <script>
@@ -28,26 +28,30 @@ if (process.client) {
 }
 
 const dev = process.env.NODE_ENV !== 'production'
+const getId = () => 'editor_' + new Date().getTime()
 export default {
   props: {
     value: Object,
     minHeight: {
       type: [String, Number],
       default: 480
-    }
+    },
+    readonly: Boolean
   },
 
   data() {
     return {
+      id: getId(),
       editor: null,
       isReadOnly: false,
     }
   },
 
   beforeMount() {
+    // Editor.js 2.19 使用只读模式下会有错误提示，但不影响使用
     this.editor = new Editor({
-      holder: 'editor',
-      readOnly: false,
+      holder: this.id,
+      readOnly: this.readonly,
       tools: {
         header: Header,
         image: SimpleImage,
@@ -95,6 +99,14 @@ export default {
     })
   },
 
+  beforeDestroy() {
+    // this.editor.destroy();
+    // 2.19版本调用destroy会报错，这里使用dom的删除
+    if (this.editor) {
+      document.getElementById(this.id).remove();
+    }
+  },
+
   methods: {
     onChange() {
       if (this.isReadOnly === true) {
@@ -121,6 +133,10 @@ export default {
 
   computed: {
     _EditorPadding() {
+      if (this.readonly) {
+        return ''
+      }
+
       let value = ''
       if (this.$vuetify.breakpoint.xs) {
         value = '20px'
