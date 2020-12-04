@@ -151,13 +151,6 @@ export default {
   },
 
   watch: {
-    likes: {
-      handler() {
-        this.updateLikes()
-      },
-      deep: true,
-    },
-
     data: {
       handler(value) {
         this.comment = value
@@ -168,10 +161,6 @@ export default {
 
   created() {
     this.comment = this.data
-  },
-
-  beforeMount() {
-    this.updateLikes()
   },
 
   methods: {

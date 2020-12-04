@@ -239,7 +239,7 @@ export default {
           this.commentId = null
           this.message = ''
           if (rsp.code === SUCCESS) {
-            this.$alert.success('发表成功！')
+            this.$alert.success('发表成功，审核通过后将显示。')
             return this.$api.get('/guestbook')
           }
         })
