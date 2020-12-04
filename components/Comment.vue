@@ -44,8 +44,8 @@
           >
             <v-icon
               size="24"
-              :color="comment.heartColor"
-              :class="comment.heartClass"
+              :color="heartColor"
+              :class="heartClass"
             >
               mdi-heart
             </v-icon>
@@ -61,7 +61,8 @@
       <div class="pr-3">
         <div class="body-2">
           <span v-if="comment.toId">
-            回复 <span class="toUserName">@{{ comment.toName }}</span>：
+            回复 <span class="toUserName">@{{ comment.toName }}</span
+            >：
           </span>
           <p>{{ comment.content }}</p>
         </div>
@@ -133,6 +134,20 @@ export default {
     hasComment() {
       return !isEmpty(this.comment)
     },
+
+    isLiked() {
+      return this.likes.includes(LIKE_TYPE.COMMENT + '-' + this.comment.id)
+    },
+
+    heartColor() {
+      return this.isLiked ? 'red darken-1' : undefined
+    },
+
+    heartClass() {
+      return this.isLiked
+        ? ''
+        : 'animate__animated animate__heartBeat animate__slower animate__infinite'
+    },
   },
 
   watch: {
@@ -192,10 +207,10 @@ export default {
         return
       }
 
-      if (!this.comment.isLiked) {
-        this.onLike(this.comment)
+      if (!this.isLiked) {
+        this.onLike()
       } else {
-        this.onCancelLike(this.comment)
+        this.onCancelLike()
       }
     },
 
@@ -214,17 +229,9 @@ export default {
           if (rsp.code === SUCCESS) {
             this.$alert.success(rsp.msg)
             this.comment.likeNum++
-            this.comment.isLiked = true
-            this.comment.heartColor = this.comment.isLiked
-              ? 'red darken-1'
-              : undefined
-            this.comment.heartClass = this.comment.isLiked
-              ? ''
-              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-            const likes = [
-              ...this.likes,
-              `${LIKE_TYPE.COMMENT}-${this.comment.id}`,
-            ]
+
+            const joinKey = `${LIKE_TYPE.COMMENT}-${this.comment.id}`
+            const likes = [...this.likes, joinKey]
             this.$store.commit('setLikes', likes)
             this.comment = { ...this.comment }
           }
@@ -246,37 +253,14 @@ export default {
           if (rsp.code === SUCCESS) {
             this.$alert.success(rsp.msg)
             this.comment.likeNum--
-            this.comment.isLiked = false
-            this.comment.heartColor = this.comment.isLiked
-              ? 'red darken-1'
-              : undefined
-            this.comment.heartClass = this.comment.isLiked
-              ? ''
-              : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-            const likes = this.likes.filter(
-              (v) => v !== `${LIKE_TYPE.COMMENT}-${this.comment.id}`
-            )
+
+            const joinKey = `${LIKE_TYPE.COMMENT}-${this.comment.id}`
+            const likes = this.likes.filter((v) => v !== joinKey)
             this.$store.commit('setLikes', likes)
             this.comment = { ...this.comment }
           }
         })
-    },
-
-    updateLikes() {
-      if (this.likes.length === 0) {
-        this.comment.isLiked = false
-      } else {
-        const joinKey = LIKE_TYPE.COMMENT + '-' + this.comment.id
-        this.comment.isLiked = this.likes.includes(joinKey)
-      }
-
-      this.comment.heartColor = this.comment.isLiked
-        ? 'red darken-1'
-        : undefined
-      this.comment.heartClass = this.comment.isLiked
-        ? ''
-        : 'animate__animated animate__heartBeat animate__slower animate__infinite'
-    },
+    }
   },
 }
 </script>
