@@ -21,9 +21,10 @@
       <no-ssr>
         <div class="toolbar-right-content align-center">
           <template v-if="isPost">
-            <v-btn class="px-2 _post" depressed text small>
+            <v-btn class="px-2 _post" depressed text small @click.stop="handlerLike">
               <v-icon
-                class="animate__animated animate__heartBeat animate__slower animate__infinite"
+                :class="heartClass"
+                :color="heartColor"
               >
                 mdi-heart
               </v-icon>
@@ -62,7 +63,7 @@
           >
             登录
           </v-btn>
-          <v-menu close-on-click offset-y>
+          <v-menu close-on-click offset-y v-else>
             <template v-slot:activator="{ on, attrs }">
               <v-avatar
                 v-if="authority"
@@ -71,10 +72,7 @@
                 v-bind="attrs"
                 v-on="on"
               >
-                <v-img
-                  :src="avatar || require('~/static/images/Delta.jpg')"
-                  alt=""
-                />
+                <v-img :src="avatar || defaultAvatar" />
               </v-avatar>
             </template>
 
@@ -108,7 +106,10 @@
 import Tabs from './Tabs'
 import LeftNavigation from './LeftNavigation'
 import logout from '../utils/logout.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import { LIKE_TYPE } from '~/config/keys'
+import cloneDeep from 'lodash/cloneDeep'
+import { FAIL, SUCCESS } from '~/config/codes'
 
 export default {
   components: {
@@ -121,6 +122,7 @@ export default {
       title: 'Arutoria',
       showLeftNavigation: false,
       onLogout: logout.bind(this),
+      defaultAvatar: require('~/static/images/Delta.jpg'),
     }
   },
 
@@ -131,6 +133,7 @@ export default {
   },
 
   computed: {
+    ...mapState(['likes']),
     ...mapGetters(['authority', 'avatar']),
 
     _mobileHideClass() {
@@ -143,6 +146,20 @@ export default {
 
     currentPost() {
       return this.$store.state.posts[this.$route.params.id]
+    },
+
+    isLiked() {
+      return this.likes.includes(LIKE_TYPE.POST + '-' + this.currentPost.id)
+    },
+
+    heartColor() {
+      return this.isLiked ? 'red darken-1' : undefined
+    },
+
+    heartClass() {
+      return this.isLiked
+        ? ''
+        : 'animate__animated animate__heartBeat animate__slower animate__infinite'
     },
 
     likeNum() {
@@ -183,6 +200,69 @@ export default {
     },
 
     onSetting() {},
+
+    handlerLike() {
+      if (!this.authority) {
+        this.showAccount()
+        return
+      }
+
+      if (!this.isLiked) {
+        this.onLike()
+      } else {
+        this.onCancelLike()
+      }
+    },
+
+    onLike() {
+      this.$api
+        .post('/like', {
+          type: LIKE_TYPE.POST,
+          id: this.currentPost.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('你已经点过赞了哟！')
+            return
+          }
+
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            const post = cloneDeep(this.$store.state.posts)
+            post[this.currentPost.id].likeNum++
+            this.$store.commit('setPostCache', post)
+
+            const joinKey = `${LIKE_TYPE.POST}-${this.currentPost.id}`
+            const likes = [...this.likes, joinKey]
+            this.$store.commit('setLikes', likes)
+          }
+        })
+    },
+
+    onCancelLike() {
+      this.$api
+        .post('/like/cancel', {
+          type: LIKE_TYPE.POST,
+          id: this.currentPost.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('取消点赞出现错误')
+            return
+          }
+
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            const post = cloneDeep(this.$store.state.posts)
+            post[this.currentPost.id].likeNum--
+            this.$store.commit('setPostCache', post)
+
+            const joinKey = `${LIKE_TYPE.POST}-${this.currentPost.id}`
+            const likes = this.likes.filter((v) => v !== joinKey)
+            this.$store.commit('setLikes', likes)
+          }
+        })
+    }
   },
 }
 </script>
@@ -195,6 +275,9 @@ export default {
   i.theme--dark,
   ._post.theme--dark .font-unineue-bold {
     color: #ffffff !important;
+  }
+  ._post span.font-unineue-bold {
+    font-size: 14px;
   }
 }
 .v-list._menu_list {
