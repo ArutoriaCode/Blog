@@ -10,7 +10,7 @@
 
       <v-card-title> {{ post.title }} </v-card-title>
 
-      <v-card-subtitle> 这是一段静态的文本 </v-card-subtitle>
+      <v-card-subtitle> {{ post.shortContent }} </v-card-subtitle>
 
       <v-card-actions class="_post_actions">
         <v-btn color="error" text :to="`/post/${post.id}`"> 开始阅读 </v-btn>
@@ -20,7 +20,7 @@
             <v-icon size="20"> mdi-eye </v-icon>
             <span class="pl-1 font-pixer">{{ post.readCount }}</span>
           </v-btn>
-          <v-btn text x-small @click="onLike">
+          <v-btn text x-small @click="handlerLike">
             <v-icon
               size="20"
               :color="_heartColor"
@@ -40,7 +40,8 @@
   </div>
 </template>
 <script>
-import { CREDENTIALS_REQUIRED_TOKEN, SUCCESS } from '~/config/codes'
+import { mapGetters, mapState } from 'vuex'
+import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { LIKE_TYPE } from '~/config/keys'
 export default {
   props: {
@@ -57,6 +58,9 @@ export default {
   },
 
   computed: {
+    ...mapState(['likes']),
+    ...mapGetters(['authority']),
+
     postImg() {
       return this.post.img || require('~/static/images/Delta.jpg')
     },
@@ -76,21 +80,63 @@ export default {
   },
 
   methods: {
-    onLike() {
-      this.$api.post('/like', {
-        type: LIKE_TYPE.POST,
-        id: this.post.id
-      }).then(rsp => {
-        if (rsp.code === CREDENTIALS_REQUIRED_TOKEN) {
-          this.showAccount()
-        }
+    handlerLike() {
+      if (!this.authority) {
+        this.showAccount()
+        return
+      }
 
-        if (rsp.code === SUCCESS) {
-          this.$alert.success(rsp.msg);
-          this.post.likeNum++
-          this.post.isLiked = true
-        }
-      })
+      if (!this.isLiked) {
+        this.onLike()
+      } else {
+        this.onCancelLike()
+      }
+    },
+
+    onLike() {
+      this.$api
+        .post('/like', {
+          type: LIKE_TYPE.POST,
+          id: this.post.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('你已经点过赞了哟！')
+            return
+          }
+
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            this.post.likeNum++
+
+            const joinKey = `${LIKE_TYPE.POST}-${this.post.id}`
+            const likes = [...this.likes, joinKey]
+            this.$store.commit('setLikes', likes)
+          }
+        })
+    },
+
+    onCancelLike() {
+      this.$api
+        .post('/like/cancel', {
+          type: LIKE_TYPE.POST,
+          id: this.post.id,
+        })
+        .then((rsp) => {
+          if (rsp.code === FAIL) {
+            this.$alert.info('取消点赞出现错误')
+            return
+          }
+
+          if (rsp.code === SUCCESS) {
+            this.$alert.success(rsp.msg)
+            this.post.likeNum--
+
+            const joinKey = `${LIKE_TYPE.POST}-${this.post.id}`
+            const likes = this.likes.filter((v) => v !== joinKey)
+            this.$store.commit('setLikes', likes)
+          }
+        })
     }
   }
 }
