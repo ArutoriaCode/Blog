@@ -14,7 +14,7 @@
           <div>
             <div class="d-flex justify-start align-center">
               <v-avatar size="48">
-                <v-img :src="post.img || require('~/static/images/Delta.jpg')"></v-img>
+                <v-img :src="post.user.avatar || require('~/static/images/Delta.jpg')"></v-img>
               </v-avatar>
               <div class="ml-4">
                 <div class="font-weight-regular font-unineue font-weight-bold">
@@ -26,9 +26,7 @@
           </div>
           <div></div>
         </div>
-        <div class="">
-          {{ post.content }}
-        </div>
+        <Editor v-if="post.content" :value="post.content" readonly></Editor>
       </div>
     </div>
     <v-divider></v-divider>
@@ -58,8 +56,13 @@ import dayjs from 'dayjs'
 import isSafeInteger from 'lodash/isSafeInteger'
 import get from 'lodash/get'
 import { mapGetters } from 'vuex'
+import Editor from '@/components/Editor/index.vue';
 
 export default {
+  components: {
+    Editor
+  },
+
   async asyncData({ $api, params, store }) {
     console.log("🚀 Get Cache")
     const posts = store.state.posts
@@ -72,6 +75,10 @@ export default {
     const post = await $api.get(`posts/${params.id}`)
     if (post.data && post.data.updated_at) {
       post.data.updated_at = dayjs(post.data.updated_at).format("M月 DD，YYYY")
+    }
+
+    if (post.data && typeof post.data.content === 'string') {
+      post.data.content = JSON.parse(post.data.content)
     }
 
     store.commit('setPostCache', post.data)
