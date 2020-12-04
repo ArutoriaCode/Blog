@@ -62,7 +62,7 @@
         </div>
         <Editor v-model="content" ref="editor" />
         <div class="text-right mt-4">
-          <v-btn color="saber" @click.stop="sendPost">
+          <v-btn color="saber" @click.stop="sendPost" :loading="loading">
             发布
             <v-icon size="18" class="ml-2">mdi-send</v-icon>
           </v-btn>
@@ -73,7 +73,7 @@
 </template>
 <script>
 import Editor from '@/components/Editor/index.vue'
-import { INSUFFICIENT_PRIVILEGE_LEVEL, SUCCESS } from '~/config/codes'
+import { FAIL, INSUFFICIENT_PRIVILEGE_LEVEL, SUCCESS } from '~/config/codes'
 export default {
   components: {
     Editor,
@@ -90,6 +90,7 @@ export default {
         (v) => !v || v.size < 3000000 || '文章头图大小不能大于5MB',
       ],
       previewImg: null,
+      loading: false
     }
   },
 
@@ -133,6 +134,11 @@ export default {
         return
       }
 
+      if (this.loading) {
+        return
+      }
+
+      this.loading = true
       const formData = new FormData()
       formData.append('title', this.title)
       formData.append('content', JSON.stringify(this.content))
@@ -149,11 +155,19 @@ export default {
             setTimeout(() => {
               this.$router.replace('/')
             }, 3000)
+            return
+          }
+
+          this.loading = false
+          if (rsp.code === FAIL) {
+            this.$alert.error('发表文章失败！')
           }
 
           if (rsp.code === SUCCESS) {
             this.$alert.success('发表成功！')
           }
+        }).catch(() => {
+          this.loading = false
         })
     },
 
