@@ -1,6 +1,6 @@
 ### 项目说明
 博客整体布局和样式参考[Yevpt](https://www.yevpt.com/)
-预览地址：[Arutoria](http://arutoria.com/)
+预览地址：[http://arutoria.com/](http://arutoria.com/)
 
 后端语言框架
 
