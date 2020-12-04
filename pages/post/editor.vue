@@ -176,8 +176,8 @@ export default {
           )
         },
         onConfirm: () => {
+          this.headImg = ''
           this.previewImg = null
-          this.headImg = null
         },
       })
     },

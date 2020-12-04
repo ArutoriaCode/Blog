@@ -1,21 +1,10 @@
 ### 项目说明
-
-第一个[Nuxt](https://nuxtjs.org/)项目
-
 博客整体布局和样式参考[Yevpt](https://www.yevpt.com/)
-
-使用的技术框架和包如下：
-
-1. Vue2
-2. Vuetify
-3. dayjs
-4. lodash
-5. ...
+预览地址：[Arutoria](http://arutoria.com/)
 
 后端语言框架
 
 1. java（待开发）
-
 
 2. egg.js（开发中）
    egg仓库地址：https://github.com/Chenwangdexiwang/Blog-egg
@@ -24,9 +13,9 @@
 1. 拉取仓库代码到本地
 2. npm install
 4. 拉取后端仓库代码
-5. 修改`plugins/api.js`文件中`api.setBaseURL()`的url
+5. 修改`plugins/api.js`文件中`api.setBaseURL()`的url并对应到后端服务地址
 6. npm run dev
-7. 如要扩展，请自行解决跨域请求问题
+7. 如要调试扩展，请自行解决跨域请求问题
 
 ### 部署
 
