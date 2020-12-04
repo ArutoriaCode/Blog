@@ -53,7 +53,7 @@
     <div class="flex xs12 sm12">
       <div class="form-field input-required avatar-upload">
         <label>头像</label>
-        <v-file-input accept=".png,.jpg" show-size v-model="avatar" :rules="avatarRules" filled rounded dense />
+        <v-file-input accept="image/png, image/jpeg" show-size v-model="avatar" :rules="avatarRules" filled rounded dense />
       </div>
     </div>
     <div class="flex xs12 sm12 text-center">
