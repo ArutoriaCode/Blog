@@ -1,9 +1,9 @@
-import Alert from '@/components/Alert'
+import Dialog from '@/components/Dialog'
 import { Vue, vuetify } from './vuetify'
 
 const component = new Vue({
   vuetify,
-  render: (h) => h(Alert),
+  render: (h) => h(Dialog),
 })
 
 export default (ctx, inject) => {
@@ -11,5 +11,5 @@ export default (ctx, inject) => {
   const Instance = component.$mount()
   document.body.appendChild(component.$el)
 
-  inject('alert', Instance.$children[0])
+  inject('dialog', Instance.$children[0])
 }
