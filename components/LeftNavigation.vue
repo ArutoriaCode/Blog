@@ -56,12 +56,12 @@
         </v-list>
       </div>
     </div>
-    <div slot="append" class="container">
+    <div slot="append" class="container nav-footer">
       <no-ssr>
         <v-btn
           block
           rounded
-          color="primary"
+          color="blue"
           v-if="!authority"
           @click="_showAccount"
           >登录</v-btn
@@ -241,6 +241,9 @@ export default {
         color: #ffffff !important;
       }
     }
+  }
+  .container.nav-footer .v-btn__content {
+    color: #fff;
   }
 }
 </style>
