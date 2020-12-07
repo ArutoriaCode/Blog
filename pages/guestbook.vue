@@ -2,7 +2,12 @@
   <div class="pageGuestbook">
     <div class="flex-middle-between">
       <div class="title" style="margin-bottom: 6px">留言</div>
-      <v-btn text color="orange lighten-2" v-if="toId" @click="onCancelReply"
+      <v-btn
+        text
+        color="orange lighten-2"
+        small
+        v-if="toId"
+        @click="onCancelReply"
         >取消回复</v-btn
       >
     </div>
@@ -52,8 +57,12 @@
           />
         </div>
       </Comment>
+      <div class="pageination" v-if="limit > 0">
+        <v-select v-model="limit" :items="limitValues" hint="条/页" persistent-hint></v-select>
+        <v-pagination :value="current" @input="onChangePage" @next="getListPage" @previous="getListPage" :length="pageSize" />
+      </div>
     </v-card>
-    <v-alert prominent class="empty-alert pa-16" v-else>
+    <v-alert prominent class="empty-alert pa-16" v-else-if="total === 0">
       <div slot="prepend">
         <v-img
           :src="require('~/static/images/comment_empty.png')"
@@ -66,13 +75,13 @@
 </template>
 <script>
 import dayjs from 'dayjs'
-import { mapGetters, mapState } from 'vuex'
-import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
-import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
 import isSafeInteger from 'lodash/isSafeInteger'
 import cloneDeep from 'lodash/cloneDeep'
 import Comment from '@/components/Comment'
 import isEmpty from 'lodash/isEmpty'
+import { mapGetters, mapState } from 'vuex'
+import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
+import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
 export default {
   inject: {
     showAccount: {
@@ -81,6 +90,7 @@ export default {
   },
 
   data: () => ({
+    commentCache: {},
     comments: [],
     replys: {},
     message: '',
@@ -89,6 +99,11 @@ export default {
     toName: null,
 
     spreadLoading: false,
+    current: 1,
+    limit: 5,
+    total: 0,
+    pageSize: 0,
+    limitValues: [5, 10, 15, 20]
   }),
 
   components: {
@@ -96,21 +111,30 @@ export default {
   },
 
   async asyncData({ $api }) {
+    const result = {
+      comments: [],
+      current: 1,
+      limit: 5,
+      pageSize: 0,
+      commentCache: {},
+      total: 0
+    }
+
     try {
       const response = await $api.get('/guestbook')
-      return {
-        comments: response.code === SUCCESS ? response.data || [] : [],
+      if (response.code === SUCCESS) {
+        result.comments = response.data
+        result.current = response.current
+        result.limit = response.limit
+        result.pageSize = response.pageSize
+        result.total = response.total
+        result.commentCache[result.current] = result.comments
       }
     } catch (error) {
       console.error('Get Comment Error:', error)
-      return {
-        comments: [],
-      }
+    } finally {
+      return result
     }
-  },
-
-  created() {
-    this._initComments()
   },
 
   beforeMount() {
@@ -132,19 +156,14 @@ export default {
       },
       deep: true,
     },
+    limit() {
+      this.commentCache = {}
+      this.current = 1
+      this.getListPage()
+    }
   },
 
   methods: {
-    _initComments() {
-      if (this.comments && this.comments.length === 0) {
-        return
-      }
-
-      this.comments.map((c) => {
-        c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
-      })
-    },
-
     onCancelReply() {
       this.commentId = null
       this.toId = null
@@ -274,6 +293,33 @@ export default {
         ? ''
         : 'animate__animated animate__heartBeat animate__slower animate__infinite'
     },
+
+    onChangePage(page) {
+      this.current = page
+      this.getListPage()
+    },
+
+    getListPage() {
+      if (this.commentCache[this.current]) {
+        this.comments = this.commentCache[this.current]
+        return
+      }
+
+      this.$api
+        .get(`/guestbook?current=${this.current}&limit=${this.limit}`)
+        .then((rsp) => {
+          if (rsp.code !== SUCCESS) {
+            return Promise.reject()
+          }
+
+          this.comments = rsp.data
+          this.commentCache[this.current] = this.comments
+          this.current = rsp.current
+          this.limit = rsp.limit
+          this.total = rsp.total
+          this.pageSize = rsp.pageSize
+        })
+    },
   },
 }
 </script>
@@ -301,6 +347,28 @@ export default {
   .sub-comment-list {
     padding-left: 28px;
     margin-top: 5px;
+  }
+  .pageination {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    nav {
+      min-width: 100px;
+    }
+    .v-pagination {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end !important;
+    }
+    .v-select {
+      max-width: 50px;
+      padding-top: 0 !important;
+      margin-top: 0 !important;
+      .v-input__control {
+        max-width: 50px;
+      }
+    }
   }
 }
 </style>
