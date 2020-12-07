@@ -74,7 +74,7 @@ export default {
     theme: {
       themes: {
         dark: {
-          primary: colors.blue.darken2,
+          primary: '#22469a',
           accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
           info: colors.teal.lighten1,
@@ -87,6 +87,7 @@ export default {
           elaina: '#f1e8eb',
         },
         light: {
+          primary: '#22469a',
           // saber 阿尔托莉雅
           saber: '#22469a',
           // 灰之魔女 伊蕾娜

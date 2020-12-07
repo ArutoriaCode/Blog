@@ -54,6 +54,22 @@
   .v-toolbar__content, .v-toolbar__extension {
     padding: 4px 16px;
   }
+
+  .v-pagination {
+    padding: 8px 0;
+    li > button {
+      height: 24px;
+      width: 24px;
+      i.v-icon {
+        font-size: 18px;
+        font-size: 1.125rem;
+      }
+      &.v-pagination__item {
+        font-size: 14px;
+        font-size: 0.875rem;
+      }
+    }
+  }
 }
 
 .flex-middle {

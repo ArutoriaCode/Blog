@@ -105,10 +105,10 @@
 <script>
 import Tabs from './Tabs'
 import LeftNavigation from './LeftNavigation'
+import cloneDeep from 'lodash/cloneDeep'
 import logout from '../utils/logout.js'
 import { mapGetters, mapState } from 'vuex'
 import { LIKE_TYPE } from '~/config/keys'
-import cloneDeep from 'lodash/cloneDeep'
 import { FAIL, SUCCESS } from '~/config/codes'
 
 export default {
