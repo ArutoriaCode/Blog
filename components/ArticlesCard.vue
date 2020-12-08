@@ -6,6 +6,7 @@
         :src="postImg"
         max-width="100%"
         max-height="400px"
+        class="zoomIn"
       >
         <template v-slot:placeholder>
           <v-row class="fill-height ma-0" align="center" justify="center">
@@ -22,10 +23,10 @@
           threshold: 0.5,
         }"
       >
-        <div class="animate__animated animate__fadeInUp">
-          <v-card-title> {{ post.title }} </v-card-title>
+        <div class="animate__animated animate__fadeInUp describe_area">
+          <v-card-title @click="$router.push(`/post/${post.id}`)"> {{ post.title }} </v-card-title>
           <v-card-subtitle> {{ updatedAt }} </v-card-subtitle>
-          <v-card-text v-if="post.shortContent">{{ post.shortContent }}</v-card-text>
+          <v-card-text v-if="post.shortContent" @click="$router.push(`/post/${post.id}`)">{{ post.shortContent }}</v-card-text>
         </div>
       </v-lazy>
       <v-card-actions class="_post_actions">
@@ -167,20 +168,40 @@ export default {
 }
 </script>
 <style lang="scss">
-.post-main-item-box:first-child .post-main-item {
-  margin-top: 0;
-}
-.post-main-item-box .post-main-item {
-  margin-top: 24px;
-}
-._post_actions .d-flex .v-btn__content {
-  display: flex;
-  flex-direction: row !important;
-  justify-content: center !important;
-  align-items: flex-end !important;
-  .font-pixer {
-    font-size: 18px !important;
-    font-size: 1.125rem !important;
+.post-main-item-box {
+  .post-main-item {
+    margin-top: 24px;
+  }
+  &:first-child .post-main-item {
+    margin-top: 0;
+  }
+  .zoomIn {
+    transition: all 444ms ease-in-out;
+    &:hover {
+      .v-image__image.v-image__image--cover {
+        transition: all 444ms ease-in-out;
+        transform: scale(1.05);
+      }
+    }
+    .v-image__image.v-image__image--cover {
+      transition: all 444ms ease-in-out;
+      transform: scale(1);
+    }
+  }
+  ._post_actions .d-flex .v-btn__content {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    .font-pixer {
+      font-size: 18px !important;
+      font-size: 1.125rem !important;
+    }
+  }
+  .describe_area {
+    .v-card__title, .v-card__text {
+      cursor: pointer;
+    }
   }
 }
 </style>

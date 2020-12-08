@@ -48,6 +48,7 @@ export default {
   },
 
   beforeMount() {
+    this.isReadOnly = this.readonly
     // Editor.js 2.19 使用只读模式下会有错误提示，但不影响使用
     this.editor = new Editor({
       holder: this.id,

@@ -28,11 +28,10 @@
                   >EMPTY DATA</v-subheader
                 >
               </div>
-              <ArticleCard
-                v-for="post in posts"
-                :key="post.id"
-                :post="post"
-              />
+              <ArticleCard v-for="post in posts" :key="post.id" :post="post" />
+              <div class="loadingMore" v-if="!noMoreData">
+                <v-btn small rounded :loading="loading" @click="loadMorePosts">加载更多</v-btn>
+              </div>
             </div>
           </ArticleList>
           <Tags :class="_TagsClass"></Tags>
@@ -49,6 +48,7 @@ import ArticleCard from '@/components/ArticlesCard'
 import Tags from '@/components/Tags'
 import isEmpty from 'lodash/isEmpty'
 import { USER_INFO } from '~/config/keys'
+import { SUCCESS } from '~/config/codes'
 export default {
   components: {
     TopCarousel,
@@ -60,6 +60,10 @@ export default {
   data() {
     return {
       hasError: false,
+
+      current: 1,
+      pageSize: 0,
+      loading: false
     }
   },
 
@@ -71,17 +75,22 @@ export default {
   },
 
   async asyncData({ $api }) {
+    const result = {
+      posts: [],
+      hasError: false,
+      current: 1,
+      pageSize: 0
+    }
     try {
-      const posts = await $api.get('/posts')
-      return {
-        posts: posts.data
-      }
+      const rsp = await $api.get('/posts')
+      const { data, current, pageSize } = rsp
+      result.posts = data
+      result.current = current
+      result.pageSize = pageSize
     } catch (error) {
       console.error('Get Post Error:', error)
-      return {
-        posts: [],
-        hasError: true,
-      }
+    } finally {
+      return result
     }
   },
 
@@ -106,7 +115,38 @@ export default {
     _emptyClass() {
       return 'd-flex _post-card flex-column justify-center align-center'
     },
+
+    noMoreData() {
+      return this.current >= this.pageSize
+    }
   },
+
+  methods: {
+    loadMorePosts() {
+      if (this.loading) {
+        return
+      }
+
+      this.loading = true
+      this.$api.get(`/posts?current=${this.current}&limit=5`).then(rsp => {
+        this.loading = false
+        if (rsp.code !== SUCCESS) {
+          this.$alert.error('加载失败！')
+          return
+        }
+
+        if (rsp.data instanceof Array && rsp.data.length > 0) {
+          this.posts.push(...rsp.data)
+        }
+
+        const { current, pageSize } = rsp
+        this.pageSize = pageSize
+        this.current++
+      }).catch(() => {
+        this.loading = false
+      })
+    }
+  }
 }
 </script>
 <style lang="scss">
