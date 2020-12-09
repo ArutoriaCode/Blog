@@ -16,9 +16,11 @@
       id="_message"
       v-model="message"
       flat
+      counter
+      no-resize
+      height="200px"
       :autofocus="!!toName"
       :label="_TextareaLabel"
-      hide-details
       :rules="commentRules"
     />
     <div class="flex-middle-between mt-2 mb-2">

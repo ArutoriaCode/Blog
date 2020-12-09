@@ -1,5 +1,5 @@
 <template>
-  <no-ssr>
+  <client-only>
     <div class="pageEditor">
       <v-form ref="sendPost" lazy-validation>
         <v-subheader class="pa-0 title">编辑文章</v-subheader>
@@ -69,7 +69,7 @@
         </div>
       </v-form>
     </div>
-  </no-ssr>
+  </client-only>
 </template>
 <script>
 import Editor from '@/components/Editor/index.vue'

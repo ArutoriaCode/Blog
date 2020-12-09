@@ -57,7 +57,7 @@
       </div>
     </div>
     <div slot="append" class="container nav-footer">
-      <no-ssr>
+      <client-only>
         <v-btn
           block
           rounded
@@ -76,7 +76,7 @@
             退出
           </v-btn>
         </div>
-      </no-ssr>
+      </client-only>
     </div>
   </v-navigation-drawer>
 </template>

@@ -18,7 +18,7 @@
       </template>
       <!-- Left End -->
       <!-- Right Start -->
-      <no-ssr>
+      <client-only>
         <div class="toolbar-right-content align-center">
           <template v-if="isPost">
             <v-btn class="px-2 _post" depressed text small @click.stop="handlerLike">
@@ -97,7 +97,7 @@
             <v-icon>mdi-menu</v-icon>
           </v-btn>
         </div>
-      </no-ssr>
+      </client-only>
       <!-- Right End -->
     </v-app-bar>
   </div>
