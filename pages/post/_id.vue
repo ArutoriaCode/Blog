@@ -1,11 +1,13 @@
 <template>
   <div class="post-container">
-    <div
-      class="post-bg-img-box animate__animated animate__zoomIn"
-      v-show="postImg"
-    >
-      <v-img :src="postImg" width="100%" max-height="405px" />
-    </div>
+    <client-only>
+      <div
+        class="post-bg-img-box animate__animated animate__zoomIn"
+        v-show="!!postImg"
+      >
+        <v-img :src="postImg" width="100%" max-height="405px" />
+      </div>
+    </client-only>
     <div class="article-container">
       <div class="article-content">
         <div class="display-1">{{ postTitle }}</div>
@@ -37,7 +39,14 @@
     <v-card flat class="mx-auto comment-card">
       <div class="flex-middle-between">
         <h3 class="title">评论</h3>
-        <v-btn text small color="orange lighten-2" @click="cancelReply" v-if="toName">取消回复</v-btn>
+        <v-btn
+          text
+          small
+          color="orange lighten-2"
+          @click="cancelReply"
+          v-if="toName"
+          >取消回复</v-btn
+        >
       </div>
       <div class="mt-2">
         <v-textarea
@@ -120,7 +129,7 @@ export default {
       toId: null,
       toName: null,
       commentId: null,
-      commentRules
+      commentRules,
     }
   },
 
@@ -187,7 +196,7 @@ export default {
         return `回复${this.toName}：`
       }
       return '请在这里填写评论（不超过360个字符）'
-    }
+    },
   },
 
   head() {
@@ -297,7 +306,7 @@ export default {
       const input = document.getElementById('comment')
       input.scrollIntoView({
         behavior: 'smooth',
-        block: 'center'
+        block: 'center',
       })
 
       input.focus()
@@ -307,7 +316,7 @@ export default {
       this.commentId = null
       this.toId = null
       this.toName = null
-    }
+    },
   },
 }
 </script>
