@@ -60,7 +60,7 @@
 <script>
 import intercept from '~/mixins/intercept'
 import { LOGIN_SUCEESS } from '@/config/codes.js'
-import { emailRules, passwordRules } from './rules'
+import { emailRules, passwordRules } from '@/utils/rules'
 import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '@/config/keys'
 export default {
   mixins: [intercept],

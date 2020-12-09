@@ -19,6 +19,7 @@
       :autofocus="!!toName"
       :label="_TextareaLabel"
       hide-details
+      :rules="commentRules"
     />
     <div class="flex-middle-between mt-2 mb-2">
       <v-subheader class="subinfo">欢迎留言</v-subheader>
@@ -82,6 +83,7 @@ import isEmpty from 'lodash/isEmpty'
 import { mapGetters, mapState } from 'vuex'
 import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
 import { COMMENT_TYPE, LIKE_TYPE } from '~/config/keys'
+import { commentRules } from '@/utils/rules'
 export default {
   inject: {
     showAccount: {
@@ -97,6 +99,7 @@ export default {
     commentId: null,
     toId: null,
     toName: null,
+    commentRules,
 
     spreadLoading: false,
     current: 1,
@@ -237,6 +240,10 @@ export default {
     onLeaveMessage() {
       if (!this.authority) {
         this.showAccount()
+        return
+      }
+      const v = this.message
+      if (!v || (v && !v.trim()) || v.length >= 360) {
         return
       }
 

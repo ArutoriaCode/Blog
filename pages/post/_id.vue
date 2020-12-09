@@ -35,43 +35,92 @@
     </div>
     <v-divider></v-divider>
     <v-card flat class="mx-auto comment-card">
-      <div class="flex-middle-between pr-6">
+      <div class="flex-middle-between">
         <h3 class="title">评论</h3>
+        <v-btn text small color="orange lighten-2" @click="cancelReply" v-if="toName">取消回复</v-btn>
       </div>
       <div class="mt-2">
         <v-textarea
+          v-model="commentContent"
           flat
           solo
-          name="input-7-4"
-          label="请在这里填写评论"
+          :label="label"
+          counter
+          no-resize
+          :rules="commentRules"
+          height="200px"
+          id="comment"
         ></v-textarea>
       </div>
       <div class="d-flex justify-end">
         <v-btn color="saber" small v-if="!authority" @click="showAccount"
           >请先登录</v-btn
         >
-        <v-btn color="amber lighten-3" text small v-if="authority">评论</v-btn>
+        <v-btn
+          color="saber"
+          small
+          v-if="authority"
+          :disabled="!commentContent"
+          :loading="loading"
+          @click="sendComment"
+          >{{ toName ? '回复' : '发表' }}</v-btn
+        >
       </div>
     </v-card>
     <v-divider></v-divider>
-    <div id="comments" class="comment-list-box"></div>
+    <v-card flat>
+      <Comment
+        v-for="comment in comments"
+        :key="comment.id"
+        :data="comment"
+        @reply="onReply"
+        @spread="onSpread"
+      >
+        <div
+          class="sub-comment-list"
+          :id="`cid-${comment.id}`"
+          v-if="replys[comment.id] && replys[comment.id].status"
+        >
+          <Comment
+            v-for="reply in replys[comment.id].data"
+            @reply="onReply"
+            :data="reply"
+            :key="reply.id"
+            :isComment="false"
+          />
+        </div>
+      </Comment>
+    </v-card>
   </div>
 </template>
 <script>
 import dayjs from 'dayjs'
 import isSafeInteger from 'lodash/isSafeInteger'
 import get from 'lodash/get'
-import { mapGetters } from 'vuex'
 import Editor from '@/components/Editor/index.vue'
+import Comment from '@/components/Comment'
+import { mapGetters } from 'vuex'
+import { COMMENT_TYPE } from '~/config/keys'
+import { SUCCESS } from '~/config/codes'
+import { commentRules } from '@/utils/rules'
 
 export default {
   components: {
     Editor,
+    Comment,
   },
 
   data() {
     return {
       post: {},
+      comments: [],
+      replys: {},
+      commentContent: '',
+      loading: false,
+      toId: null,
+      toName: null,
+      commentId: null,
+      commentRules
     }
   },
 
@@ -94,8 +143,10 @@ export default {
     }
 
     store.commit('setPostCache', post.data)
+    const comments = await $api.get(`postComment?id=${params.id}`)
     return {
       post: post.data,
+      comments: comments.data,
     }
   },
 
@@ -130,6 +181,13 @@ export default {
 
       return null
     },
+
+    label() {
+      if (this.toName) {
+        return `回复${this.toName}：`
+      }
+      return '请在这里填写评论（不超过360个字符）'
+    }
   },
 
   head() {
@@ -139,8 +197,117 @@ export default {
   },
 
   validate({ params }) {
-    // 必须是number类型
+    // Number是为了防止小数点'3.0'
     return isSafeInteger(Number(params.id))
+  },
+
+  methods: {
+    sendComment() {
+      const v = this.commentContent
+      if (!v || (v && !v.trim()) || v.length >= 360) {
+        return
+      }
+
+      if (this.loading === true) {
+        return
+      }
+
+      this.loading = true
+      const data = {
+        type: COMMENT_TYPE.POST,
+        ownerId: this.post.id,
+        content: this.commentContent,
+      }
+      if (this.commentId && this.toId) {
+        data.commentId = this.commentId
+        data.toId = this.toId
+      }
+
+      this.$api
+        .post('/comment/create', data)
+        .then((rsp) => {
+          this.loading = false
+          this.commentId = null
+          this.toId = null
+          this.toName = null
+          if (rsp.code === SUCCESS) {
+            this.$alert.success('成功，评论审核通过后可显示。')
+          }
+        })
+        .catch(() => {
+          this.loading = false
+          this.$alert.error('出错了！')
+        })
+    },
+
+    onSpread({ commentId, status }) {
+      this.spreadLoading = true
+      const reply = this.replys[commentId]
+      if (reply && reply.data) {
+        reply.status = status
+        this.replys[commentId] = { ...reply }
+        this.spreadLoading = false
+        // 如果是展开，那么开始滚动
+        if (status) {
+          this.scrollByReply(commentId)
+        }
+        return
+      }
+
+      this.$api
+        .get(`/comment/reply?commentId=${commentId}`)
+        .then((rsp) => {
+          this.spreadLoading = false
+          if (rsp.code === SUCCESS) {
+            const reply = rsp.data.map((c) => {
+              c.created_at = dayjs(c.created_at).format('YYYY-MM-DD HH:mm')
+              return c
+            })
+            this.replys[commentId] = {
+              data: reply,
+              status: true,
+            }
+            this.scrollByReply(commentId)
+          }
+        })
+        .catch((err) => {
+          this.spreadLoading = false
+        })
+    },
+
+    scrollByReply(commentId) {
+      this.$nextTick(() => {
+        const scroll = document.querySelector(
+          `.sub-comment-list#cid-${commentId}`
+        )
+
+        if (scroll) {
+          scroll.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+          })
+        }
+      })
+    },
+
+    onReply({ commentId, toId, toName }) {
+      this.commentId = commentId
+      this.toId = toId
+      this.toName = toName
+      const input = document.getElementById('comment')
+      input.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      })
+
+      input.focus()
+    },
+
+    cancelReply() {
+      this.commentId = null
+      this.toId = null
+      this.toName = null
+    }
   },
 }
 </script>
@@ -173,7 +340,7 @@ export default {
         display: inline-block;
         margin-left: 4px;
         color: #757575 !important;
-      };
+      }
     }
   }
 }

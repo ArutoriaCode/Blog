@@ -13,9 +13,20 @@ export const passwordRules = [
 
 export const usernameRules = [
   v => !!v || '必填项',
-  v => (v && v.length >= 2 && v.length <= 16) || '昵称长度不能小于2字符且不能大于16字符'
+  v => {
+    v = v.trim()
+    if (v.includes(' ')) {
+      return '昵称内不能包含空格'
+    }
+    return (v.length >= 2 && v.length <= 16) || '昵称不能小于2字符且大于16个字符'
+  }
 ]
 
 export const avatarRules = [
   value => !value || value.size < 3000000 || '头像大小不能大于3MB',
+]
+
+export const commentRules = [
+  v => !!(v && v.trim()) || '不能全部是空格呀~',
+  v => v && v.length < 360 || '字符长度不能大于360个字符'
 ]

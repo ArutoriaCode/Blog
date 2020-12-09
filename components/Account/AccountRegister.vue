@@ -78,7 +78,7 @@
 </template>
 <script>
 import intercept from '@/mixins/intercept'
-import { emailRules, passwordRules, usernameRules, avatarRules } from './rules'
+import { emailRules, passwordRules, usernameRules, avatarRules } from '@/utils/rules'
 import { EXIST_USER, REGISTER_SUCCESS, SUCCESS } from '@/config/codes.js'
 import { ACCESS_TOKEN, REFRESH_ACCESS_TOKEN, USER_INFO } from '~/config/keys'
 export default {
