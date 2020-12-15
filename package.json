@@ -16,6 +16,7 @@
     "@editorjs/link": "^2.3.1",
     "@editorjs/marker": "^1.2.2",
     "@editorjs/simple-image": "^1.4.0",
+    "@mdi/font": "^5.8.55",
     "@nuxtjs/axios": "^5.12.2",
     "animate.css": "^4.1.1",
     "core-js": "^3.6.5",

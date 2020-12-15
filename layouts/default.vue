@@ -21,6 +21,7 @@
 
 <script>
 import 'animate.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 import isEmpty from 'lodash/isEmpty'
 import Account from '~/components/Account/Account.vue'
 import AppBar from '~/components/AppBar.vue'

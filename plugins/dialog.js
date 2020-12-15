@@ -1,4 +1,5 @@
 import Dialog from '@/components/Dialog'
+import '@mdi/font/css/materialdesignicons.min.css'
 import { Vue, vuetify } from './vuetify'
 
 const component = new Vue({
