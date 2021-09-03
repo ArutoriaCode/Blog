@@ -17,7 +17,7 @@
               >
             </div>
             <div v-show="!hasError">
-              <div v-if="isEmptyPost" :class="_emptyClass">
+              <div v-if="isEmptyPost" class="d-flex _post-card flex-column justify-center align-center">
                 <v-img
                   width="280"
                   height="280"
@@ -60,7 +60,6 @@ export default {
   data() {
     return {
       hasError: false,
-
       current: 1,
       pageSize: 0,
       loading: false
@@ -81,6 +80,7 @@ export default {
       current: 1,
       pageSize: 0
     }
+
     try {
       const rsp = await $api.get('/posts')
       const { data, current, pageSize } = rsp
@@ -112,10 +112,6 @@ export default {
       return isEmpty(this.posts)
     },
 
-    _emptyClass() {
-      return 'd-flex _post-card flex-column justify-center align-center'
-    },
-
     noMoreData() {
       return this.current >= this.pageSize
     }
@@ -141,7 +137,7 @@ export default {
 
         const { current, pageSize } = rsp
         this.pageSize = pageSize
-        this.current++
+        this.current = current + 1
       }).catch(() => {
         this.loading = false
       })
