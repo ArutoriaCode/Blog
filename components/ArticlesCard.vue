@@ -55,7 +55,7 @@
 <script>
 import dayjs from 'dayjs'
 import { mapGetters, mapState } from 'vuex'
-import { CREDENTIALS_REQUIRED_TOKEN, FAIL, SUCCESS } from '~/config/codes'
+import { FAIL, SUCCESS } from '~/config/codes'
 import { LIKE_TYPE } from '~/config/keys'
 export default {
   props: {
